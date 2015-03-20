@@ -2,10 +2,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import com.mysql.jdbc.PreparedStatement;
 
-public class Main {
-	static Connection db = MySQL.Connectar();
+public class tpv {
+	static Connection db;
 	static Scanner telado = new Scanner(System.in);
 	static void addRegistro(){
 		String sentencia = "";
@@ -26,8 +25,7 @@ public class Main {
 				+"\'" + desc + "\', " + precio + ", " + iva + ", " + precio*(iva/100 + 1) + ", " + stock + ")";
 		
 		try {
-			PreparedStatement exec =  (PreparedStatement) db.prepareStatement(sentencia);
-			exec.executeUpdate();
+			db.prepareStatement(sentencia).executeUpdate();
 			System.out.println("Añadido con existo");
 		} catch(SQLException e){
 			System.out.println(e);
@@ -35,6 +33,7 @@ public class Main {
 		}
 	}
 	public static void main(String[] args) {
+		db = MySQL.Connectar();
 		addRegistro();
 		
 		
