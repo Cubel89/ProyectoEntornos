@@ -21,7 +21,7 @@ public class tpv {
 		System.out.print("Stock: ");
 		stock = Integer.parseInt(telado.nextLine());
 
-		sentencia = "INSERT INTO productos(Descripcion, PrecioSinIVA, IVA, PrecioConIVA, Stock) VALUES("
+		sentencia = "INSERT INTO Productos(Descripcion, PrecioSinIVA, IVA, PrecioConIVA, Stock) VALUES("
 				+"\'" + desc + "\', " + precio + ", " + iva + ", " + precio*(iva/100 + 1) + ", " + stock + ")";
 		
 		try {
