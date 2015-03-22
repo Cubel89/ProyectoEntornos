@@ -1,3 +1,4 @@
+package pruebas;
 import java.io.*;
  
 class Ficheros {
