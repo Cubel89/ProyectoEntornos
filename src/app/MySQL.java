@@ -5,10 +5,10 @@ import java.sql.DriverManager;
 
 public class MySQL {
 	
-	private static final String db = "entornosproyect";
-	private static final String url = "jdbc:mysql://db4free.net/"+db;
-	private static final String user = "quique";
-	private static final String pass = "123456";
+	private static final String db = "";
+	private static final String url = ""+db;
+	private static final String user = "";
+	private static final String pass = "";
 	
 	public static Connection Connectar(){
 		Connection link = null;
