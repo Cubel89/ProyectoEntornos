@@ -1,225 +1,209 @@
 package app;
+
+import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
+import javax.swing.border.EmptyBorder;
 
+public class TpvMain extends JFrame {
 
-public class TpvMain {
-	static Connection db;
-	static Scanner telado = new Scanner(System.in);
-
-	static JFrame gui = new JFrame("TPV");
-	static JPanel menu = new JPanel(),
-			submenu = new JPanel(),
-			content = new JPanel();
-	
-	
-	
-	// ???????????????
-	static ArrayList<Productos> productos = new ArrayList<Productos>();
-	static ArrayList<Clientes> clientes = new ArrayList<Clientes>();
-	static ArrayList<Tickets> tickets = new ArrayList<Tickets>();
-	static ArrayList<Facturas> facturas = new ArrayList<Facturas>();
-	
-	
-	static void anadirProducto(){
-	//	String sentencia = "";
-		final JTextField txt_desc = new JTextField(),
-				txt_stock = new JTextField(),
-				txt_precio = new JTextField(),
-				txt_iva = new JTextField();
-		JButton guardar = new JButton("Guardar");
-		
-		content.add(new JLabel("Descipcion: ")).setBounds(30, 30, 150, 30);
-		content.add(txt_desc).setBounds(200, 30, 150, 30);
-		content.add(new JLabel("Precio: ")).setBounds(30, 80, 150, 30);
-		content.add(txt_precio).setBounds(200, 80, 150, 30);
-		content.add(new JLabel("IVA: ")).setBounds(30, 130, 150, 30);
-		content.add(txt_iva).setBounds(200, 130, 150, 30);
-		content.add(new JLabel("Stock: ")).setBounds(30, 180, 150, 30);
-		content.add(txt_stock).setBounds(200, 180, 150, 30);
-
-		content.add(guardar).setBounds(200, 300, 150, 30);
-/*
-		sentencia = "INSERT INTO Productos(descripcion, precio, iva, precioIva, stock) VALUES("
-				+"\'" + txt_desc + "\', " + txt_precio + ", " + txt_iva + ", " + txt_precio*(txt_iva/100 + 1) + ", " + txt_stock + ")";
-		*/
-		
-		guardar.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				productos.add(new Productos(txt_desc.getText().toString(),
-						Double.parseDouble(txt_precio.getText()), Double.parseDouble(txt_iva.getText()),
-						Integer.parseInt(txt_stock.getText())));
-				
-				
-				JOptionPane.showMessageDialog(null, "Añadido con exito");
-				
-			}
-		});
-		
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2948762342322980933L;
+	private JPanel content = new JPanel();
+	private JPasswordField passwordField;
+	static Connection db = MySQL.Connectar();
+	private JTextField txtUsuario;
+	/**
+	 * Launch the application.
+	 */
 	public static void main(String[] args) {
-		db = MySQL.Connectar();
-		
-		gui.setSize(1000, 550);
-		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		gui.setLayout(null);
-		
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					TpvMain frame = new TpvMain();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 
-		gui.add(menu).setBounds(10, 10, 230, 480);
-		menu.setLayout(null);
-		menu.setBorder(BorderFactory.createTitledBorder("Menu"));
+	/**
+	 * Create the frame.
+	 */
+	public TpvMain() {
+		getContentPane().setFont(new Font("Dialog", Font.PLAIN, 12));
+		setTitle("TPV");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 618, 362);
 		
-		gui.add(submenu).setBounds(250, 10, 200, 480);
-		submenu.setLayout(null);
-		submenu.setBorder(BorderFactory.createTitledBorder("SubMenu"));
-		
-		gui.add(content).setBounds(460, 10, 520, 480);
+		JMenuBar menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
+		content.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(content);
 		content.setLayout(null);
-		content.setBorder(BorderFactory.createTitledBorder("Contenido"));
-
-		menu();
 		
-	//	gui.pack();
-		gui.setVisible(true);
+		JPanel login = new JPanel();
+		login.setBounds(0, 0, 614, 310);
+		content.add(login);
+		login.setLayout(null);
 		
+		JLabel lblUsuario = new JLabel("Usuario:");
+		lblUsuario.setBounds(188, 88, 60, 15);
+		login.add(lblUsuario);
+		
+		JLabel lblContrasea = new JLabel("Contraseña:");
+		lblContrasea.setBounds(188, 139, 88, 15);
+		login.add(lblContrasea);
+		
+		passwordField = new JPasswordField();
+		passwordField.setBounds(294, 137, 136, 19);
+		login.add(passwordField);
+		passwordField.setColumns(12);
+		
+		JButton btnAceptar = new JButton("Aceptar");
+		btnAceptar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				login(txtUsuario.getText(), passwordField.getPassword());
+			}
+		});
+		btnAceptar.setBounds(317, 174, 113, 25);
+		login.add(btnAceptar);
+		
+		JButton btnRegistrar = new JButton("Registrar");
+		btnRegistrar.setBounds(188, 174, 126, 25);
+		login.add(btnRegistrar);
+		
+		txtUsuario = new JTextField();
+		txtUsuario.setBounds(294, 86, 136, 19);
+		login.add(txtUsuario);
+		txtUsuario.setColumns(10);
+		
+		JTextPane txtpnCadaUsuarioTiene = new JTextPane();
+		txtpnCadaUsuarioTiene.setText("Cada usuario tiene su propio panel de administracion o su propio panel de compras segun el tipo de usuario que sea, (Administrador o Cliente)");
+		txtpnCadaUsuarioTiene.setBounds(12, 248, 590, 50);
+		login.add(txtpnCadaUsuarioTiene);
+		
+		JLabel lblh1 = new JLabel("Acceso a la cuenta");
+		lblh1.setFont(new Font("Dialog", Font.BOLD, 32));
+		lblh1.setBounds(136, 12, 346, 38);
+		login.add(lblh1);
+		
+	//	contentPane.add(menuBar, BorderLayout.NORTH);
+		
+		JMenu mnArchivo = new JMenu("Archivo");
+		mnArchivo.setEnabled(false);
+		menuBar.add(mnArchivo);
+		
+		JMenu mnImportar = new JMenu("Importar");
+		mnArchivo.add(mnImportar);
+		
+		JMenuItem mntmProductos = new JMenuItem("Productos");
+		mnImportar.add(mntmProductos);
+		
+		JMenuItem mntmClientes = new JMenuItem("Clientes");
+		mnImportar.add(mntmClientes);
+		
+		JMenu mnExportar = new JMenu("Exportar");
+		mnArchivo.add(mnExportar);
+		
+		JMenuItem mntmProductos_1 = new JMenuItem("Productos");
+		mnExportar.add(mntmProductos_1);
+		
+		JMenuItem mntmClientes_1 = new JMenuItem("Clientes");
+		mnExportar.add(mntmClientes_1);
+		
+		JMenuItem mntmDesconectar = new JMenuItem("Desconectar");
+		mnArchivo.add(mntmDesconectar);
+		
+		JMenuItem mntmCerrar = new JMenuItem("Cerrar");
+		mnArchivo.add(mntmCerrar);
+		
+		JMenu mnOpciones = new JMenu("Opciones");
+		mnOpciones.setEnabled(false);
+		menuBar.add(mnOpciones);
+		
+		JMenu mnGestionDeProductos = new JMenu("Gestion de productos");
+		mnOpciones.add(mnGestionDeProductos);
+		
+		JMenuItem mntmAadir = new JMenuItem("Añadir");
+		mnGestionDeProductos.add(mntmAadir);
+		
+		JMenuItem mntmBorrar = new JMenuItem("Borrar");
+		mnGestionDeProductos.add(mntmBorrar);
+		
+		JMenuItem mntmModificar = new JMenuItem("Modificar");
+		mnGestionDeProductos.add(mntmModificar);
+		
+		JMenu mnGestionDeClientes = new JMenu("Gestion de clientes");
+		mnOpciones.add(mnGestionDeClientes);
+		
+		JMenuItem mntmAadir_1 = new JMenuItem("Añadir");
+		mnGestionDeClientes.add(mntmAadir_1);
+		
+		JMenuItem mntmEliminar = new JMenuItem("Eliminar");
+		mnGestionDeClientes.add(mntmEliminar);
+		
+		JMenuItem mntmModificar_1 = new JMenuItem("Modificar");
+		mnGestionDeClientes.add(mntmModificar_1);
+		
+		JMenu mnAyuda = new JMenu("Ayuda");
+		menuBar.add(mnAyuda);
+		
+		JMenuItem mntmAcercaDe = new JMenuItem("Acerca de");
+		mnAyuda.add(mntmAcercaDe);
 	}
+	static void login(String user, char [] pass){
+		try {
+			ResultSet select = db.createStatement().executeQuery(
+					"select * from Usuarios where usuario = '" + user + "' and contrasena = '" + String.valueOf(pass) + "';"
+					);
+			
+			/*
+			 * El metodo absolute selecciona la ROW (fila) 1.
+			 */
+			
+			if(select.absolute(1)){
+				JOptionPane.showMessageDialog(null, "Bienvenido " + user + ", te has identificado correctamente");
+				
+				
+				switch (select.getInt("nivel")) {
+					case 0:
+						JOptionPane.showMessageDialog(null, "Eres cliente");
+						break;
+					case 1:
+						JOptionPane.showMessageDialog(null, "Eres administrador");
+						break;
 	
-	static void menu(){
-		JButton productos = new JButton("Gestion de productos"),
-				clientes = new JButton("Gestion de clientes"),
-				ventas = new JButton("Gestion de ventas"),
-				facturas = new JButton("Gestion de facturas");
-
-		menu.add(productos).setBounds(10, 30, 210, 30);
-		menu.add(clientes).setBounds(10, 70, 210, 30);
-		menu.add(ventas).setBounds(10, 110, 210, 30);
-		menu.add(facturas).setBounds(10, 150, 210, 30);
-		
-		menu.add(new JLabel("View in GitHub")).setBounds(10, 150, 180, 530);
-		
-		
-		productos.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				submenu.removeAll();
-				submenu.repaint();
-				gestionProductos();
+					default:
+						break;
+				}
+			} else {
+				JOptionPane.showMessageDialog(null, "Los datos introducidos no son correctos. ");
 			}
-		});
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-		clientes.addActionListener(new ActionListener() {
-					
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				submenu.removeAll();
-				submenu.repaint();
-			//	gestionClientes();
-			}
-		});
-		
-		ventas.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				submenu.removeAll();
-				submenu.repaint();
-			//	gestionVentas();
-			}
-		});
-		
-		facturas.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				submenu.removeAll();
-				submenu.repaint();
-			//	gestionFacturas);
-			}
-		});
-		
-	}
-	
-	static void gestionProductos(){
-		JButton anadir = new JButton("Añadir"),
-				eliminar = new JButton("Eliminar"),
-				importar = new JButton("Importar"),
-				exportar = new JButton("Exportar");
-
-		submenu.setBorder(BorderFactory.createTitledBorder("Gestion de Productos"));
-		submenu.add(anadir).setBounds(10, 30, 180, 30);
-		submenu.add(eliminar).setBounds(10, 70, 180, 30);
-		submenu.add(importar).setBounds(10, 110, 180, 30);
-		submenu.add(exportar).setBounds(10, 150, 180, 30);
-		
-		
-		anadir.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				content.removeAll();
-				content.repaint();
-				anadirProducto();
-			}
-		});
-		
-		eliminar.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				content.removeAll();
-				content.repaint();
-			//	eliminarProducto();
-			}
-		});
-		
-		importar.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				content.removeAll();
-				content.repaint();
-			//	eliminarProducto();
-			}
-		});
-
-		exportar.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				content.removeAll();
-				content.repaint();
-			//	eliminarProducto();
-			}
-		});
 	}
 }

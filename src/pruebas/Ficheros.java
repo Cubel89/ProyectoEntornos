@@ -16,7 +16,7 @@ class Ficheros {
          br = new BufferedReader(fr);
  
          // Lectura del fichero
-         String linea;
+   //      String linea;
         // while((linea=br.readLine())!=null)
          System.out.println(br.readLine());
          System.out.println(br.readLine());

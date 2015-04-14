@@ -7,14 +7,13 @@ public class Productos {
 	private String descripcion;
 	private double precio, iva, precioIva;
 	
-	public Productos(String ee) {
-		
+	public Productos() {
 	}
 	public Productos(String desc, double precio, double iva, int stock){
 		String sentencia = "INSERT INTO Productos(descripcion, precio, iva, precioIva, stock) VALUES("
 				+"\'" + desc + "\', " + precio + ", " + iva + ", " + precio*(iva/100 + 1) + ", " + stock + ")";
 		try {
-			TpvMain.db.prepareStatement(sentencia).executeUpdate();
+			TpvMain_Viejo.db.prepareStatement(sentencia).executeUpdate();
 			System.out.println("EEEEEEEEEEEEEEEEEEEEEEE");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
