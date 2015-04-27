@@ -28,9 +28,8 @@ public class TpvMain extends JFrame {
 	 */
 	private static final long serialVersionUID = -2948762342322980933L;
 	private JPanel content = new JPanel();
-	private JPasswordField passwordField;
-	static Connection db = MySQL.Connectar();
-	private JTextField txtUsuario;
+	protected static Connection db = MySQL.Connectar();
+	protected JMenuBar menuBar;
 	/**
 	 * Launch the application.
 	 */
@@ -40,6 +39,7 @@ public class TpvMain extends JFrame {
 				try {
 					TpvMain frame = new TpvMain();
 					frame.setVisible(true);
+					frame.pack();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -50,13 +50,13 @@ public class TpvMain extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public TpvMain() {
+	protected TpvMain() {
 		getContentPane().setFont(new Font("Dialog", Font.PLAIN, 12));
 		setTitle("TPV");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 618, 362);
 		
-		JMenuBar menuBar = new JMenuBar();
+		menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		content.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(content);
@@ -75,7 +75,12 @@ public class TpvMain extends JFrame {
 		lblContrasea.setBounds(188, 139, 88, 15);
 		login.add(lblContrasea);
 		
-		passwordField = new JPasswordField();
+		final JTextField txtUsuario = new JTextField();
+		txtUsuario.setBounds(294, 86, 136, 19);
+		login.add(txtUsuario);
+		txtUsuario.setColumns(10);
+		
+		final JPasswordField passwordField = new JPasswordField();
 		passwordField.setBounds(294, 137, 136, 19);
 		login.add(passwordField);
 		passwordField.setColumns(12);
@@ -93,10 +98,7 @@ public class TpvMain extends JFrame {
 		btnRegistrar.setBounds(188, 174, 126, 25);
 		login.add(btnRegistrar);
 		
-		txtUsuario = new JTextField();
-		txtUsuario.setBounds(294, 86, 136, 19);
-		login.add(txtUsuario);
-		txtUsuario.setColumns(10);
+		
 		
 		JTextPane txtpnCadaUsuarioTiene = new JTextPane();
 		txtpnCadaUsuarioTiene.setText("Cada usuario tiene su propio panel de administracion o su propio panel de compras segun el tipo de usuario que sea, (Administrador o Cliente)");
@@ -172,15 +174,11 @@ public class TpvMain extends JFrame {
 		JMenuItem mntmAcercaDe = new JMenuItem("Acerca de");
 		mnAyuda.add(mntmAcercaDe);
 	}
-	static void login(String user, char [] pass){
+	void login(String user, char [] pass){
 		try {
 			ResultSet select = db.createStatement().executeQuery(
 					"select * from Usuarios where usuario = '" + user + "' and contrasena = '" + String.valueOf(pass) + "';"
 					);
-			
-			/*
-			 * El metodo absolute selecciona la ROW (fila) 1.
-			 */
 			
 			if(select.absolute(1)){
 				JOptionPane.showMessageDialog(null, "Bienvenido " + user + ", te has identificado correctamente");
@@ -188,10 +186,17 @@ public class TpvMain extends JFrame {
 				
 				switch (select.getInt("nivel")) {
 					case 0:
-						JOptionPane.showMessageDialog(null, "Eres cliente");
+						content.removeAll();
+						content.repaint();
+						System.out.println("EEEE");
+						content.add(new GuiCliente());
 						break;
 					case 1:
-						JOptionPane.showMessageDialog(null, "Eres administrador");
+						content.removeAll();
+						content.repaint();
+						add(new GuiAdmin());
+						System.out.println("AAAAAAAAAAAAAAAAA");
+						setVisible(true);
 						break;
 	
 					default:
