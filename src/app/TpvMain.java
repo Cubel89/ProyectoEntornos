@@ -20,6 +20,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
+import java.awt.Toolkit;
 
 public class TpvMain extends JFrame {
 
@@ -27,9 +28,10 @@ public class TpvMain extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = -2948762342322980933L;
-	private JPanel content = new JPanel();
-	protected static Connection db = MySQL.Connectar();
-	protected JMenuBar menuBar;
+	private static JPanel content = new JPanel();
+	static Connection db = MySQL.Connectar();
+	private static JMenuBar menuBar;
+	public static TpvMain frame = null;
 	/**
 	 * Launch the application.
 	 */
@@ -37,9 +39,10 @@ public class TpvMain extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					TpvMain frame = new TpvMain();
+					frame= new TpvMain();
 					frame.setVisible(true);
-					frame.pack();
+					frame.setSize(630, 360);
+			//		frame.pack();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -50,20 +53,21 @@ public class TpvMain extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	protected TpvMain() {
+	public TpvMain() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(TpvMain.class.getResource("/com/sun/java/swing/plaf/windows/icons/DetailsView.gif")));
 		getContentPane().setFont(new Font("Dialog", Font.PLAIN, 12));
 		setTitle("TPV");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 618, 362);
 		
 		menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		content.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(content);
+		content.setSize(400,250);
 		content.setLayout(null);
 		
 		JPanel login = new JPanel();
-		login.setBounds(0, 0, 614, 310);
+		login.setBounds(5, 0, 614, 310);
 		content.add(login);
 		login.setLayout(null);
 		
@@ -188,15 +192,14 @@ public class TpvMain extends JFrame {
 					case 0:
 						content.removeAll();
 						content.repaint();
-						System.out.println("EEEE");
 						content.add(new GuiCliente());
+						frame.pack();
 						break;
 					case 1:
 						content.removeAll();
 						content.repaint();
-						add(new GuiAdmin());
-						System.out.println("AAAAAAAAAAAAAAAAA");
-						setVisible(true);
+						content.add(new GuiAdmin());
+						frame.setSize(900, 500);
 						break;
 	
 					default:
