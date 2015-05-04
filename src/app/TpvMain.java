@@ -30,7 +30,7 @@ public class TpvMain extends JFrame {
 	private static final long serialVersionUID = -2948762342322980933L;
 	private static JPanel content = new JPanel();
 	static Connection db = MySQL.Connectar();
-	private static JMenuBar menuBar;
+	public static JMenuBar menuBar;
 	public static TpvMain frame = null;
 	/**
 	 * Launch the application.
@@ -117,60 +117,21 @@ public class TpvMain extends JFrame {
 	//	contentPane.add(menuBar, BorderLayout.NORTH);
 		
 		JMenu mnArchivo = new JMenu("Archivo");
-		mnArchivo.setEnabled(false);
 		menuBar.add(mnArchivo);
 		
-		JMenu mnImportar = new JMenu("Importar");
-		mnArchivo.add(mnImportar);
-		
-		JMenuItem mntmProductos = new JMenuItem("Productos");
-		mnImportar.add(mntmProductos);
-		
-		JMenuItem mntmClientes = new JMenuItem("Clientes");
-		mnImportar.add(mntmClientes);
-		
-		JMenu mnExportar = new JMenu("Exportar");
-		mnArchivo.add(mnExportar);
-		
-		JMenuItem mntmProductos_1 = new JMenuItem("Productos");
-		mnExportar.add(mntmProductos_1);
-		
-		JMenuItem mntmClientes_1 = new JMenuItem("Clientes");
-		mnExportar.add(mntmClientes_1);
-		
-		JMenuItem mntmDesconectar = new JMenuItem("Desconectar");
-		mnArchivo.add(mntmDesconectar);
-		
 		JMenuItem mntmCerrar = new JMenuItem("Cerrar");
+		mntmCerrar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.exit(ABORT);
+			}
+		});
 		mnArchivo.add(mntmCerrar);
 		
 		JMenu mnOpciones = new JMenu("Opciones");
-		mnOpciones.setEnabled(false);
 		menuBar.add(mnOpciones);
 		
-		JMenu mnGestionDeProductos = new JMenu("Gestion de productos");
-		mnOpciones.add(mnGestionDeProductos);
-		
-		JMenuItem mntmAadir = new JMenuItem("Añadir");
-		mnGestionDeProductos.add(mntmAadir);
-		
-		JMenuItem mntmBorrar = new JMenuItem("Borrar");
-		mnGestionDeProductos.add(mntmBorrar);
-		
-		JMenuItem mntmModificar = new JMenuItem("Modificar");
-		mnGestionDeProductos.add(mntmModificar);
-		
-		JMenu mnGestionDeClientes = new JMenu("Gestion de clientes");
-		mnOpciones.add(mnGestionDeClientes);
-		
-		JMenuItem mntmAadir_1 = new JMenuItem("Añadir");
-		mnGestionDeClientes.add(mntmAadir_1);
-		
-		JMenuItem mntmEliminar = new JMenuItem("Eliminar");
-		mnGestionDeClientes.add(mntmEliminar);
-		
-		JMenuItem mntmModificar_1 = new JMenuItem("Modificar");
-		mnGestionDeClientes.add(mntmModificar_1);
+		JMenuItem mntmCrearCuenta = new JMenuItem("Crear cuenta");
+		mnOpciones.add(mntmCrearCuenta);
 		
 		JMenu mnAyuda = new JMenu("Ayuda");
 		menuBar.add(mnAyuda);
@@ -187,7 +148,7 @@ public class TpvMain extends JFrame {
 			if(select.absolute(1)){
 				JOptionPane.showMessageDialog(null, "Bienvenido " + user + ", te has identificado correctamente");
 				
-				
+				menuBar.getMenu(1).removeAll();
 				switch (select.getInt("nivel")) {
 					case 0:
 						content.removeAll();

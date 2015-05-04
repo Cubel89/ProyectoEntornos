@@ -25,7 +25,6 @@ public class GuiAdmin extends JPanel {
 	 */
 	public GuiAdmin() {
 		setLayout(null);
-		//setBounds(0,0,500,300);
 		setSize(850, 450);
 		JPanel panelMenu = new JPanel();
 		panelMenu.setBorder(new LineBorder(Color.DARK_GRAY));
@@ -81,9 +80,23 @@ public class GuiAdmin extends JPanel {
 		
 		JMenuItem mntmConsultar_1 = new JMenuItem("Consultar");
 		mnGestinDeUsuarios.add(mntmConsultar_1);
-		
+
+		menuBar();
 		
 		setVisible(true);
 
+	}
+	void menuBar(){
+		JMenu opciones = TpvMain.menuBar.getMenu(1),
+				users = new JMenu("Gestion de usuarios"),
+				productos = new JMenu("Gestion de productos");
+		
+		JMenuItem add = new JMenuItem("Añadir");
+		
+		opciones.add(users);
+		opciones.add(productos);
+		
+		users.add(add);
+		
 	}
 }
