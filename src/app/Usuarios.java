@@ -53,6 +53,7 @@ public class Usuarios extends JPanel{
 		panel.add(txt_user);
 		txt_user.setColumns(10);
 		
+		
 		JLabel lblContrasea = new JLabel("Contraseña");
 		lblContrasea.setBounds(65, 41, 100, 15);
 		panel.add(lblContrasea);

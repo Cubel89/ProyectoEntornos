@@ -48,7 +48,7 @@ public class GuiAdmin extends JPanel {
 				repaint();
 				add(new Usuarios());
 			}
-		});
+		}); 
 		
 	}
 }
