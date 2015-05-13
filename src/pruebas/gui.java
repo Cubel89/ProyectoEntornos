@@ -17,6 +17,7 @@ public class gui extends JPanel{
 	private JTextField txtNombre;
 	private JTextField txtApe;
 	private JTextField txtDir;
+	private JTextField txtFecha;
 	public gui() {
 		setLayout(null);
 		
@@ -58,7 +59,7 @@ public class gui extends JPanel{
 		add(lblDni);
 		
 		JLabel lblNivel = new JLabel("Nivel");
-		lblNivel.setBounds(78, 216, 116, 15);
+		lblNivel.setBounds(78, 243, 116, 15);
 		add(lblNivel);
 		
 		txtUser = new JTextField();
@@ -94,7 +95,16 @@ public class gui extends JPanel{
 		
 		JComboBox comboBox = new JComboBox();
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Usuario", "Administrador"}));
-		comboBox.setBounds(212, 211, 166, 24);
+		comboBox.setBounds(212, 238, 166, 24);
 		add(comboBox);
+		
+		JLabel lblFecha = new JLabel("Fecha");
+		lblFecha.setBounds(78, 216, 70, 15);
+		add(lblFecha);
+		
+		txtFecha = new JTextField();
+		txtFecha.setBounds(212, 215, 166, 19);
+		add(txtFecha);
+		txtFecha.setColumns(10);
 	}
 }

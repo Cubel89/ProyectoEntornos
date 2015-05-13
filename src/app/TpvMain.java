@@ -2,6 +2,7 @@ package app;
 
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -20,7 +21,6 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
-import java.awt.Toolkit;
 
 public class TpvMain extends JFrame {
 
@@ -99,6 +99,11 @@ public class TpvMain extends JFrame {
 		login.add(btnAceptar);
 		
 		JButton btnRegistrar = new JButton("Registrar");
+		btnRegistrar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				registro();
+			}
+		});
 		btnRegistrar.setBounds(188, 174, 126, 25);
 		login.add(btnRegistrar);
 		
@@ -125,12 +130,20 @@ public class TpvMain extends JFrame {
 				System.exit(ABORT);
 			}
 		});
+		
+				
+		
 		mnArchivo.add(mntmCerrar);
 		
 		JMenu mnOpciones = new JMenu("Opciones");
 		menuBar.add(mnOpciones);
 		
 		JMenuItem mntmCrearCuenta = new JMenuItem("Crear cuenta");
+		mntmCrearCuenta.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				registro();
+			}
+		});
 		mnOpciones.add(mntmCrearCuenta);
 		
 		JMenu mnAyuda = new JMenu("Ayuda");
@@ -149,6 +162,21 @@ public class TpvMain extends JFrame {
 				JOptionPane.showMessageDialog(null, "Bienvenido " + user + ", te has identificado correctamente");
 				
 				menuBar.getMenu(1).removeAll();
+				JMenuItem mntmDesconectar = new JMenuItem("Desconectar");
+				menuBar.getMenu(0).add(mntmDesconectar);
+				
+				mntmDesconectar.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						frame.setVisible(false);
+						frame = new TpvMain();
+						frame.setVisible(true);
+						frame.setSize(630, 360);
+						
+					}
+				});
+				
 				switch (select.getInt("nivel")) {
 					case 0:
 						content.removeAll();
@@ -173,6 +201,107 @@ public class TpvMain extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+	}
+	void registro(){
+		
+		JFrame Fregistro = new JFrame("Crear cuenta");
+		JPanel registro = new JPanel();
+		Fregistro.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		Fregistro.setSize(450,400);
+		Fregistro.getContentPane().add(registro);
+		Fregistro.setVisible(true);
+		
+		
+		final JTextField txtUser, txtNombre, txtDni, txtApe, txtDir;;
+		final JPasswordField txtPass;
+		
+		registro.setLayout(null);
+		registro.setSize(500, 400);
+		JPanel panel = new JPanel();
+		panel.setBounds(12, 5, 476, 283);
+		registro.add(panel);
+		panel.setLayout(null);
+		
+		JLabel lblUsuario = new JLabel("Usuario");
+		lblUsuario.setBounds(65, 14, 100, 15);
+		panel.add(lblUsuario);
+		
+		txtUser = new JTextField();
+		txtUser.setBounds(170, 12, 175, 19);
+		panel.add(txtUser);
+		txtUser.setColumns(10);
+		
+		
+		JLabel lblContrasea = new JLabel("Contraseña");
+		lblContrasea.setBounds(65, 41, 100, 15);
+		panel.add(lblContrasea);
+		
+		txtPass = new JPasswordField();
+		txtPass.setBounds(170, 39, 175, 19);
+		panel.add(txtPass);
+		
+		JLabel lblNombre = new JLabel("Nombre");
+		lblNombre.setBounds(65, 97, 70, 15);
+		panel.add(lblNombre);
+		
+		txtNombre = new JTextField();
+		txtNombre.setBounds(170, 95, 175, 19);
+		panel.add(txtNombre);
+		txtNombre.setColumns(10);
+		
+		JLabel lblApellidos = new JLabel("Apellidos");
+		lblApellidos.setBounds(65, 124, 70, 15);
+		panel.add(lblApellidos);
+		
+		JLabel lblDniCif = new JLabel("DNI / CIF");
+		lblDniCif.setBounds(65, 68, 70, 15);
+		panel.add(lblDniCif);
+		
+		txtDni = new JTextField();
+		txtDni.setBounds(170, 66, 175, 19);
+		panel.add(txtDni);
+		txtDni.setColumns(10);
+		
+		txtApe = new JTextField();
+		txtApe.setBounds(170, 122, 175, 19);
+		panel.add(txtApe);
+		txtApe.setColumns(10);
+		
+		JLabel lblDomicilio = new JLabel("Domicilio");
+		lblDomicilio.setBounds(65, 151, 70, 15);
+		panel.add(lblDomicilio);
+		
+		txtDir = new JTextField();
+		txtDir.setBounds(170, 149, 175, 19);
+		panel.add(txtDir);
+		txtDir.setColumns(10);
+		
+		JButton btnCancelar = new JButton("Borrar");
+		btnCancelar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				txtUser.setText("");
+				txtNombre.setText("");
+				txtDni.setText("");
+				txtApe.setText("");
+				txtDir.setText("");
+				txtPass.setText("");
+			}
+		});
+		btnCancelar.setBounds(65, 240, 117, 25);
+		panel.add(btnCancelar);
+		
+		JButton btnGuardar = new JButton("Guardar");
+		btnGuardar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new Usuarios(txtUser.getText(), String.valueOf(txtPass.getPassword()),
+						txtDni.getText(), txtNombre.getText(), txtApe.getText(),
+						txtDir.getText(),0);
+				
+			}
+		});
+		btnGuardar.setBounds(228, 240, 117, 25);
+		panel.add(btnGuardar);
 		
 	}
 }
