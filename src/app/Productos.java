@@ -2,6 +2,8 @@ package app;
 
 import java.sql.SQLException;
 
+import javax.swing.JOptionPane;
+
 public class Productos {
 	private int codigo, stock;
 	private String descripcion;
@@ -13,11 +15,10 @@ public class Productos {
 		String sentencia = "INSERT INTO Productos(descripcion, precio, iva, precioIva, stock) VALUES("
 				+"\'" + desc + "\', " + precio + ", " + iva + ", " + precio*(iva/100 + 1) + ", " + stock + ")";
 		try {
-			TpvMain_Viejo.db.prepareStatement(sentencia).executeUpdate();
-			System.out.println("EEEEEEEEEEEEEEEEEEEEEEE");
+			TpvMain.db.createStatement().execute(sentencia);
+			JOptionPane.showMessageDialog(null, "Producto añadido con exito");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Se ha producido un error");
 		}
 	}
 	public int getCodigo() {
