@@ -74,9 +74,8 @@ public class Usuarios {
 		}
 		
 	}
-	public static void modificar(String user,String pass,String nombre,String ape,String domicilio, int nivel){
+	public static void modificar(String user,String pass,String nombre,String ape,String domicilio, String fecha,int nivel){
 		boolean ok = false;
-		ResultSet rs = null;
 		try {
 				
 			// VERIFICAR NULLS
@@ -94,6 +93,7 @@ public class Usuarios {
 						+ "', nombre='" + nombre
 						+ "', apellidos='" + ape
 						+ "', domicilio='" + domicilio
+						+ "', fechaAlta='" + fecha
 						+ "', nivel ="	+ nivel
 						+" WHERE usuario = '"+user+"';");
 				JOptionPane.showMessageDialog(null, "Usuario actualizado correctamente.");
@@ -103,6 +103,20 @@ public class Usuarios {
 			JOptionPane.showMessageDialog(null, "Se ha producido un error.");
 		}
 		
+	}
+	public static void eliminar(String user){
+		try {
+			ResultSet rs = TpvMain.db.createStatement().executeQuery("select usuario from Usuarios where usuario ='" + user +"';");
+			if(rs.absolute(1)){
+				if(JOptionPane.showConfirmDialog(null, "Seguro que quieres eliminar el usuario " + user + " ?") == 0){
+					TpvMain.db.createStatement().execute("delete from Usuarios where usuario = '" + user +"';");
+				}
+			} else {
+				JOptionPane.showMessageDialog(null, "El usuario " + user + " no existe.");
+			}
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Se ha producido un error.");
+		}
 	}
 	public static String [] buscar(String user){
 		String[] usuario = new String[8];
@@ -118,8 +132,7 @@ public class Usuarios {
 			}
 			
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Se ha producido un error.");
 		}
 		return usuario;
 	}

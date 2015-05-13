@@ -150,6 +150,11 @@ public class TpvMain extends JFrame {
 		menuBar.add(mnAyuda);
 		
 		JMenuItem mntmAcercaDe = new JMenuItem("Acerca de");
+		mntmAcercaDe.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				acercaDe();
+			}
+		});
 		mnAyuda.add(mntmAcercaDe);
 	}
 	void login(String user, char [] pass){
@@ -169,26 +174,23 @@ public class TpvMain extends JFrame {
 					
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						frame.setVisible(false);
+						frame.dispose();
 						frame = new TpvMain();
 						frame.setVisible(true);
 						frame.setSize(630, 360);
 						
 					}
 				});
-				
+				content.removeAll();
+				content.repaint();
 				switch (select.getInt("nivel")) {
 					case 0:
-						content.removeAll();
-						content.repaint();
 						content.add(new GuiCliente());
 						frame.pack();
 						break;
 					case 1:
-						content.removeAll();
-						content.repaint();
 						content.add(new GuiAdmin());
-						frame.setSize(900, 500);
+				//		frame.setSize(900, 500);
 						break;
 	
 					default:
@@ -303,5 +305,21 @@ public class TpvMain extends JFrame {
 		btnGuardar.setBounds(228, 240, 117, 25);
 		panel.add(btnGuardar);
 		
+	}
+	
+	void acercaDe(){
+		JFrame Facerca = new JFrame("Acerca de");
+		JPanel acerca = new JPanel();
+		Facerca.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		Facerca.setSize(450,400);
+		Facerca.getContentPane().add(acerca);
+		Facerca.setVisible(true);
+		
+		acerca.setSize(500,600);
+		JTextPane txtAcerca = new JTextPane();
+		txtAcerca.setText("Esta aplicacion ha sido realizada por Enrique Gil y Juan Jesus Gregori como proyecto para la asignatura de \"Entornos de desarrollo\"\n\nUna aplicacion sencilla para TPV que permite hacer las funciones basicas como:\nADMINISTRADORES\n------------------------------------\nAñadir usuarios y productos\nModificar usuarios y productos\nEliminar usuarios y productos\nConsultar informacion de usuarios y productos\n\nGenerar facturas\nConsultar informacion sobre facturas\n\nUSUARIOS\n------------------------------------\nComprar\nEditar perfil\nImprimir facturas\n\nEs una herramienta de Software Libre cuyo codigo lo podras encontrar en GitHub.\n\nhttps://github.com/QuiqueGilB/ProyectoEntornos");
+		txtAcerca.setSize(387, 425);
+		acerca.add(txtAcerca);
+		Facerca.pack();
 	}
 }

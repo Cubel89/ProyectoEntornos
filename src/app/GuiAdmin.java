@@ -20,7 +20,7 @@ public class GuiAdmin extends JPanel {
 //	private String user, pass, dni, nombre, ape, domicilio;
 //	private GregorianCalendar fechaAlta;
 //	private int nivel;
-	private JTextField txtUser;
+	private JTextField lblUser;
 	private JPasswordField txtPass;
 	private JTextField txtNombre;
 	private JTextField txtDni;
@@ -90,13 +90,13 @@ public class GuiAdmin extends JPanel {
 		
 		eliminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				crearUsuario();
+				eliminarUsuario();
 			}
 		});
 		
 		consultar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				crearUsuario();
+				consultarUsuario();
 			}
 		});
 		
@@ -111,10 +111,10 @@ public class GuiAdmin extends JPanel {
 		lblUsuario.setBounds(65, 14, 100, 15);
 		add(lblUsuario);
 		
-		txtUser = new JTextField();
-		txtUser.setBounds(170, 12, 175, 19);
-		add(txtUser);
-		txtUser.setColumns(10);
+		lblUser = new JTextField();
+		lblUser.setBounds(170, 12, 175, 19);
+		add(lblUser);
+		lblUser.setColumns(10);
 		
 		
 		JLabel lblContrasea = new JLabel("Contraseña");
@@ -173,7 +173,7 @@ public class GuiAdmin extends JPanel {
 		JButton btnCancelar = new JButton("Cancelar");
 		btnCancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				txtUser.setText("");
+				lblUser.setText("");
 				txtNombre.setText("");
 				txtDni.setText("");
 				txtApe.setText("");
@@ -191,7 +191,7 @@ public class GuiAdmin extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				new Usuarios(txtUser.getText(), String.valueOf(txtPass.getPassword()),
+				new Usuarios(lblUser.getText(), String.valueOf(txtPass.getPassword()),
 						txtDni.getText(), txtNombre.getText(), txtApe.getText(),
 						txtDir.getText(),box_nivel.getSelectedIndex());
 				
@@ -221,7 +221,7 @@ public class GuiAdmin extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String [] datos = Usuarios.buscar(txtBuscar.getText());
-				txtUser.setText(datos[0]);
+				lblUser.setText(datos[0]);
 				txtPass.setText(datos[1]);
 				txtDni.setText(datos[2]);
 				txtNombre.setText(datos[3]);
@@ -260,11 +260,11 @@ public class GuiAdmin extends JPanel {
 		lblNivel.setBounds(78, 243, 116, 15);
 		add(lblNivel);
 		
-		txtUser = new JTextField();
-		txtUser.setEditable(false);
-		txtUser.setBounds(212, 54, 166, 19);
-		add(txtUser);
-		txtUser.setColumns(10);
+		lblUser = new JTextField();
+		lblUser.setEditable(false);
+		lblUser.setBounds(212, 54, 166, 19);
+		add(lblUser);
+		lblUser.setColumns(10);
 		
 		txtPass = new JPasswordField();
 		txtPass.setBounds(212, 81, 166, 19);
@@ -308,12 +308,13 @@ public class GuiAdmin extends JPanel {
 		JButton btnCancelar = new JButton("Cancelar");
 		btnCancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-			//	txtUser.setText("");
+				lblUser.setText("");
 				txtNombre.setText("");
-			//	txtDni.setText("");
+				txtDni.setText("");
 				txtApe.setText("");
 				txtDir.setText("");
 				txtPass.setText("");
+				txtFecha.setText("");
 				box_nivel.setSelectedItem(1);
 			}
 		});
@@ -326,14 +327,118 @@ public class GuiAdmin extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				Usuarios.modificar(txtUser.getText(), String.valueOf(txtPass.getPassword()),
+				Usuarios.modificar(lblUser.getText(), String.valueOf(txtPass.getPassword()),
 						txtNombre.getText(), txtApe.getText(),
-						txtDir.getText(),box_nivel.getSelectedIndex());
+						txtDir.getText(),txtFecha.getText(),box_nivel.getSelectedIndex());
 				
 			}
 		});
 		btnGuardar.setBounds(240, 290, 140, 25);
 		add(btnGuardar);
+		
+		
+		JButton btnEliminar = new JButton("Eliminar");
+		btnEliminar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Usuarios.eliminar(lblUser.getText());
+				
+			}
+		});
+		btnEliminar.setBounds(390, 51, 90, 25);
+		add(btnEliminar);
 	
+	}
+	void eliminarUsuario(){
+		removeAll();
+		repaint();
+		final JTextField txtEliminar;
+		JLabel lblUsuario = new JLabel("Usuario");
+		lblUsuario.setBounds(37, 12, 70, 15);
+		add(lblUsuario);
+		
+		txtEliminar = new JTextField();
+		txtEliminar.setBounds(125, 10, 152, 19);
+		add(txtEliminar);
+		txtEliminar.setColumns(10);
+		
+		JButton btnEliminar = new JButton("Eliminar");
+		btnEliminar.setBounds(289, 7, 117, 25);
+		add(btnEliminar);
+		btnEliminar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Usuarios.eliminar(txtEliminar.getText());
+				
+			}
+		});
+	}
+	void consultarUsuario(){
+		removeAll();
+		repaint();
+		final JTextField txtBuscar;
+		JLabel lblUsuario = new JLabel("Usuario");
+		lblUsuario.setBounds(37, 12, 70, 15);
+		add(lblUsuario);
+		
+		txtBuscar = new JTextField();
+		txtBuscar.setBounds(125, 10, 152, 19);
+		add(txtBuscar);
+		txtBuscar.setColumns(10);
+		
+		JButton btnBuscar = new JButton("Buscar");
+		btnBuscar.setBounds(289, 7, 117, 25);
+		add(btnBuscar);
+		
+		
+		final JLabel lblUsuario_1 = new JLabel("Usuario: ");
+		lblUsuario_1.setBounds(78, 54, 220, 15);
+		add(lblUsuario_1);
+		
+		final JLabel lblContrasea = new JLabel("Contraseña: ");
+		lblContrasea.setBounds(78, 81, 220, 15);
+		add(lblContrasea);
+		
+		final JLabel lblNombre = new JLabel("Nombre: ");
+		lblNombre.setBounds(78, 135, 220, 15);
+		add(lblNombre);
+		
+		final JLabel lblApellidos = new JLabel("Apellidos: ");
+		lblApellidos.setBounds(78, 162, 220, 15);
+		add(lblApellidos);
+		
+		final JLabel lblDireccion = new JLabel("Direccion: ");
+		lblDireccion.setBounds(78, 189, 220, 15);
+		add(lblDireccion);
+		
+		final JLabel lblDni = new JLabel("DNI: ");
+		lblDni.setBounds(78, 108, 220, 15);
+		add(lblDni);
+		
+		final JLabel lblFecha = new JLabel("Fecha de alta: ");
+		lblFecha.setBounds(78, 216, 220, 15);
+		add(lblFecha);
+		
+		final JLabel lblNivel = new JLabel("Nivel: ");
+		lblNivel.setBounds(78, 243, 220, 15);
+		add(lblNivel);
+		
+		btnBuscar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String [] datos = Usuarios.buscar(txtBuscar.getText());
+				lblUsuario_1.setText(lblUsuario_1.getText().concat(datos[0]));
+				lblContrasea.setText(lblContrasea.getText().concat(datos[1]));
+				lblDni.setText(lblDni.getText().concat(datos[2]));
+				lblNombre.setText(lblNombre.getText().concat(datos[3]));
+				lblApellidos.setText(lblApellidos.getText().concat(datos[4]));
+				lblDireccion.setText(lblDireccion.getText().concat(datos[5]));
+				lblFecha.setText(lblFecha.getText().concat(datos[6]));
+				lblNivel.setText(lblNivel.getText().concat((Integer.parseInt(datos[7])==1)?"Administrador":"Usuario"));
+			}
+		});
 	}
 }
