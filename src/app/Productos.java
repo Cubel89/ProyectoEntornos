@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
 public class Productos {
@@ -22,6 +23,18 @@ public class Productos {
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null, "Se ha producido un error");
 		}
+	}
+	public Productos(ResultSet rs){
+		try {
+			codigo = rs.getInt(1);descripcion = rs.getString(2);
+			precio = rs.getDouble(3);
+			iva = rs.getDouble(4);
+			precioIva = rs.getDouble(5);
+			stock = rs.getInt(6);
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "No se han podido cargar los productos");
+		}
+		
 	}
 	public int getCodigo() {
 		return codigo;
@@ -60,6 +73,12 @@ public class Productos {
 		this.precioIva = precioIva;
 	}
 	
+	@Override
+	public String toString() {
+		return "Productos [codigo=" + codigo + ", stock=" + stock
+				+ ", descripcion=" + descripcion + ", precio=" + precio
+				+ ", iva=" + iva + ", precioIva=" + precioIva + "]";
+	}
 	public static void modificar(int codigo, String desc, double precio, double iva, int stock){
 		try {
 			
@@ -109,5 +128,9 @@ public class Productos {
 			JOptionPane.showMessageDialog(null, "Se ha producido un error");
 		}
 		return producto;
+	}
+	
+	public void comprar(){
+		JButton comprar = new JButton("Comprar");
 	}
 }

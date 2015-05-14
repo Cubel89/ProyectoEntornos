@@ -1,27 +1,28 @@
 package pruebas;
 
-import javax.swing.JPanel;
-import java.awt.FlowLayout;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
+import java.awt.Dimension;
+
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JPasswordField;
-import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JTextPane;
-import java.awt.Canvas;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.LineBorder;
-import java.awt.Color;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 public class gui extends JPanel{
 	public gui() {
-		setLayout(null);
 		
 		JPanel panel = new JPanel();
-		panel.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panel.setBounds(445, 0, -435, 491);
-		add(panel);
-		panel.setLayout(null);
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        for (int i = 0; i < 10; i++) {
+            panel.add(new JButton("Hello-" + i));
+        }
+        JScrollPane scrollPane = new JScrollPane(panel);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setBounds(50, 30, 300, 50);
+      
+        JPanel contentPane = new JPanel(null);
+        contentPane.setPreferredSize(new Dimension(500, 400));
+        contentPane.add(scrollPane);
+		
 	}
 }
