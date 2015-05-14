@@ -185,8 +185,8 @@ public class TpvMain extends JFrame {
 				content.repaint();
 				switch (select.getInt("nivel")) {
 					case 0:
-						content.add(new GuiCliente());
-						frame.pack();
+						content.add(new GuiCliente(user));
+				//		frame.pack();
 						break;
 					case 1:
 						content.add(new GuiAdmin());
