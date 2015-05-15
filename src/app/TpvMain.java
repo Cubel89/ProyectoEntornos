@@ -215,7 +215,7 @@ public class TpvMain extends JFrame {
 		Fregistro.setVisible(true);
 		
 		
-		final JTextField txtUser, txtNombre, txtDni, txtApe, txtDir;;
+		final JTextField txtUser, txtNombre, txtDni, txtApe, txtDir;
 		final JPasswordField txtPass;
 		
 		registro.setLayout(null);

@@ -1,33 +1,41 @@
 package pruebas;
 
-import java.awt.Dimension;
-
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 
-public class pruebas {
-	public static void main(String[] args) {
-		 JFrame frame = new JFrame();
-	        JPanel panel = new JPanel();
-	        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-	        for (int i = 0; i < 10; i++) {
-	            panel.add(new JButton("Hello-" + i));
-	        }
-	        JScrollPane scrollPane = new JScrollPane(panel);
-	        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-	        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-	        scrollPane.setBounds(50, 30, 300, 50);
-	      
-	        JPanel contentPane = new JPanel(null);
-	        contentPane.setPreferredSize(new Dimension(500, 400));
-	        contentPane.add(scrollPane);
-	        frame.setContentPane(contentPane);
-	        frame.pack();
-	        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-	        frame.setVisible(true);
-	}
+public class pruebas { 
+    
+    /** Creates a new instance of PruebaJScrollPane */ 
+    public static void main(String [] args) { 
+         
+        // La ventana 
+        JFrame ventana = new JFrame("Imagen"); 
+         
+        // El panel de scroll 
+        JScrollPane scroll = new JScrollPane(); 
+         
+        // La etiqueta. 
+        JLabel etiqueta = new JLabel(); 
+         
+        // Se carga la imagen, con path absoluto para evitar problemas y debe 
+        // ser un gif. 
+        Icon imagen = new ImageIcon ( 
+            "d:/users/javier/paginas_web/chuidiang/iconos/pizarra.gif"); 
+         
+        // Se mete la imagen en el label 
+        etiqueta.setIcon (imagen); 
+         
+        // Se mete el scroll en la ventana 
+        ventana.getContentPane().add(scroll); 
+         
+        // Se mete el label en el scroll 
+        scroll.setViewportView(etiqueta); 
+         
+        // Y se visualiza todo. 
+        ventana.pack(); 
+        ventana.setVisible(true); 
+    } 
 }
