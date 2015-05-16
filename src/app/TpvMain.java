@@ -189,7 +189,7 @@ public class TpvMain extends JFrame {
 				//		frame.pack();
 						break;
 					case 1:
-						content.add(new GuiAdmin());
+						content.add(new GuiAdmin(user));
 				//		frame.setSize(900, 500);
 						break;
 	

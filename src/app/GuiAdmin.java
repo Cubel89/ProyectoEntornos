@@ -14,10 +14,11 @@ import javax.swing.JPasswordField;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 
-public class GuiAdmin extends JPanel {
+public class GuiAdmin extends GuiCliente {
 //	private String user, pass, dni, nombre, ape, domicilio;
 //	private GregorianCalendar fechaAlta;
 //	private int nivel;
+	private String user;
 	private JTextField txt1, txt2, txt3, txt4,txt5,txt6;
 	private JPasswordField txtPass;
 	private JComboBox box_nivel;
@@ -28,25 +29,39 @@ public class GuiAdmin extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public GuiAdmin() {
+	public GuiAdmin(String user) {
+	//	this.user = user;
+		super(user);
 		setLayout(null);
 		setSize(850, 450);
 
-		JMenu opciones = TpvMain.menuBar.getMenu(1);
-		
+	//	JMenu opciones = TpvMain.menuBar.getMenu(1);
+		opciones.add(new JSeparator());
 		gestionUsuarios(opciones);
 		gestionProductos(opciones);
 		
-		JSeparator separator = new JSeparator();
 		
-		opciones.add(separator);
+		opciones.add(new JSeparator());
 		JMenuItem mntmImportar = new JMenuItem("Importar");
 		opciones.add(mntmImportar);
 		
 		JMenuItem mntmExportar = new JMenuItem("Exportar");
 		opciones.add(mntmExportar);
-		
-		
+	/*	
+		opciones.add(separator);
+		JMenuItem mntmPanelUser = new JMenuItem("Acceder como cliente");
+		mntmPanelUser.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				removeAll();
+				repaint();
+				new GuiCliente(user);
+				
+			}
+		});
+		opciones.add(mntmPanelUser);
+		*/
 		setVisible(true);
 
 	}

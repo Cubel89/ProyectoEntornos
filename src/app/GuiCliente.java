@@ -25,7 +25,9 @@ import javax.swing.JTextField;
 public class GuiCliente extends JPanel {
 
 	private static final long serialVersionUID = -7558889977118792822L;
-	private String user;
+	protected String user;
+//	private JPanel panelScroll = null;
+	protected JMenu opciones = TpvMain.menuBar.getMenu(1);
 	private static ArrayList<Productos> productos = new ArrayList<Productos>();
 	private static ArrayList<Productos> cesta = new ArrayList<Productos>();
 	
@@ -34,7 +36,7 @@ public class GuiCliente extends JPanel {
 		TpvMain.frame.setSize(860, 510);
 		setSize(850, 500);
 		this.user = user;
-		JMenu opciones = TpvMain.menuBar.getMenu(1);
+		
 	
 		JMenuItem mntmComprar = new JMenuItem("Seguir comprando");
 		mntmComprar.addActionListener(new ActionListener() {
@@ -98,9 +100,17 @@ public class GuiCliente extends JPanel {
         add(hola).setBounds(10, 10, 300, 20);;
         add(infoCesta).setBounds(10, 35, 300, 20);
         
-        JButton cesta = new JButton("Ir a la cesta");
-        add(cesta).setBounds(620,10,200,20);
-        cesta.setBackground(Color.orange);
+        JButton btnCesta = new JButton("Ir a la cesta");
+        btnCesta.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				cesta();
+				
+			}
+		});
+        add(btnCesta).setBounds(620,10,200,20);
+        btnCesta.setBackground(Color.orange);
         
         final JTextField txtBuscar = new JTextField("");
         JLabel lblBuscar = new JLabel("Buscar");
@@ -112,32 +122,24 @@ public class GuiCliente extends JPanel {
         
         
         
-        final JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		listarProductos(panel, txtBuscar.getText());
+        final JPanel panelScroll = scrolling();
+        
+		listarProductos(panelScroll, txtBuscar.getText());
         
         btnBuscar.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				listarProductos(panel, txtBuscar.getText());
-				/*
-				panel.removeAll();
-				panel.repaint();
-				System.out.println("e");
-				for (int i = 0, color = 0; i < productos.size(); i++) {
-					if(productos.get(i).getDescripcion().indexOf(txtBuscar.getText()) != -1
-							|| Integer.toString(productos.get(i).getCodigo()).indexOf(txtBuscar.getText()) != -1){
-						panel.add(productos.get(i).comprar(i, color++));
-					}
-		           	
-		        }
-		        */
-				
+				listarProductos(panelScroll, txtBuscar.getText());
 			}
 		});
         
-        JScrollPane scrollPane = new JScrollPane(panel);
+	}
+	JPanel scrolling(){
+		JPanel panelScroll = new JPanel();
+        panelScroll.setLayout(new BoxLayout(panelScroll, BoxLayout.Y_AXIS));
+		
+        JScrollPane scrollPane = new JScrollPane(panelScroll);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setAutoscrolls(true);
@@ -146,17 +148,13 @@ public class GuiCliente extends JPanel {
         JPanel contentPane = new JPanel(null);
         contentPane.setPreferredSize(new Dimension(800, 380));
         contentPane.add(scrollPane);
-      //  scrollPane.setViewportView(contentPane);
         
         add(contentPane).setBounds(10, 30, 830, 410);
-      
-        contentPane.setVisible(true);
-        
+        return panelScroll;
 	}
 	void listarProductos(JPanel panel, String buscar){
 		panel.removeAll();
 		panel.repaint();
-		System.out.println("e");
 		for (int i = 0, color = 0; i < productos.size(); i++) {
 			if(productos.get(i).getDescripcion().indexOf(buscar) != -1
 					|| Integer.toString(productos.get(i).getCodigo()).indexOf(buscar) != -1){
@@ -168,6 +166,29 @@ public class GuiCliente extends JPanel {
 	void cesta(){
 		removeAll();
 		repaint();
+		final JPanel panel = scrolling();
+		
+		for (int i = 0, color = 0; i < cesta.size(); i++) {
+			boolean evaluado = false;
+			int cant = 0;
+			
+			for(int j = i-1; j >= 0; j--){
+				if(cesta.get(j).equals(cesta.get(i))){
+					evaluado = true;
+				}
+			}
+			
+			if(!evaluado){
+	           	for (int j = i; j < cesta.size(); j++) {
+					if(cesta.get(i).equals(cesta.get(j))){
+						cant++;
+					}
+				}
+				panel.add(cesta.get(i).cesta(i, color++, cant));
+			}
+        }
+		
+		
 		
 	}
 	void tickets(){

@@ -1,41 +1,35 @@
 package pruebas;
 
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JScrollPane;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Properties;
+
+import com.mysql.jdbc.Driver;
 
 public class pruebas { 
-    
-    /** Creates a new instance of PruebaJScrollPane */ 
-    public static void main(String [] args) { 
-         
-        // La ventana 
-        JFrame ventana = new JFrame("Imagen"); 
-         
-        // El panel de scroll 
-        JScrollPane scroll = new JScrollPane(); 
-         
-        // La etiqueta. 
-        JLabel etiqueta = new JLabel(); 
-         
-        // Se carga la imagen, con path absoluto para evitar problemas y debe 
-        // ser un gif. 
-        Icon imagen = new ImageIcon ( 
-            "d:/users/javier/paginas_web/chuidiang/iconos/pizarra.gif"); 
-         
-        // Se mete la imagen en el label 
-        etiqueta.setIcon (imagen); 
-         
-        // Se mete el scroll en la ventana 
-        ventana.getContentPane().add(scroll); 
-         
-        // Se mete el label en el scroll 
-        scroll.setViewportView(etiqueta); 
-         
-        // Y se visualiza todo. 
-        ventana.pack(); 
-        ventana.setVisible(true); 
-    } 
+	private static final String db = "pepito";
+	private static final String url = "jdbc:mysql://127.0.0.1/"+db;
+	private static final String user = "root";
+	private static final String pass = "online";
+	
+	public static Connection Connectar(){
+		Connection link = null;
+		
+		try {
+			Class.forName("org.gjt.mm.mysql.Driver");
+			System.out.println("Conectando ...");
+			link = DriverManager.getConnection(url, user, pass);
+			System.out.println("Conexion establecida con éxito.");
+		}catch(Exception e){
+			System.out.println(e);
+		}
+		return link;
+	}
+	
+	
+	public static void main(String[] args) {
+		Connection db = Connectar();
+	}
 }
