@@ -1,9 +1,8 @@
 package app;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.LayoutManager;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
@@ -11,8 +10,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -142,7 +139,7 @@ public class GuiCliente extends JPanel {
         JScrollPane scrollPane = new JScrollPane(panelScroll);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollPane.setAutoscrolls(true);
+     //   scrollPane.setAutoscrolls(true);
         scrollPane.setBounds(10, 30, 800, 380);
       
         JPanel contentPane = new JPanel(null);
@@ -166,6 +163,24 @@ public class GuiCliente extends JPanel {
 	void cesta(){
 		removeAll();
 		repaint();
+		
+		JButton btnHacerPedido = new JButton("Realizar pedido");
+		btnHacerPedido.setFont(new Font("Dialog", Font.BOLD, 16));
+		btnHacerPedido.setBackground(new Color(0, 255, 0));
+		btnHacerPedido.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(cesta.size() > 0){
+					Tickets ticket = new Tickets(user, cesta);
+					cesta.clear();
+					tickets();
+				} else {
+					JOptionPane.showMessageDialog(null, "Tienes la cesta vacia, para realizar un pedido tienes que comprar algo.");
+				}
+			}
+		});
+		btnHacerPedido.setBounds(590, 10, 230, 45);
+		add(btnHacerPedido);
+		
 		final JPanel panel = scrolling();
 		
 		for (int i = 0, color = 0; i < cesta.size(); i++) {
@@ -194,7 +209,42 @@ public class GuiCliente extends JPanel {
 	void tickets(){
 		removeAll();
 		repaint();
+		JPanel panel = scrolling();
 		
+		
+		
+		ResultSet rs;
+		try {
+			rs = TpvMain.db.createStatement().executeQuery("select * from Tickets where cod_cliente ='" + user + "';");
+			while (rs.next()) {
+				panel.add(Tickets.ver(rs));
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		JLabel lblNewLabel = new JLabel("Mis tickets");
+		lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 29));
+		lblNewLabel.setBounds(20, 10, 360, 45);
+		add(lblNewLabel);
+		
+		JButton btnFactura = new JButton("Solicitar factura");
+		btnFactura.setFont(new Font("Dialog", Font.BOLD, 16));
+		btnFactura.setBackground(new Color(0, 255, 0));
+		btnFactura.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(cesta.size() > 0){
+					new Tickets(user, cesta);
+					cesta.clear();
+					tickets();
+				} else {
+					JOptionPane.showMessageDialog(null, "Selecciona como minimo un ticket");
+				}
+			}
+		});
+		btnFactura.setBounds(590, 10, 230, 45);
+		add(btnFactura);
 	}
 	void facturas(){
 		removeAll();

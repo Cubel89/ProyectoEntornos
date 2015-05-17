@@ -248,6 +248,7 @@ public class Productos {
         final JLabel lblCantidad = new JLabel("Cantidad: " + cant);
         lblCantidad.setBounds(467, 39, 100, 15);
         panel.add(lblCantidad);
+        
         final JLabel lblTotal = new JLabel("Total: " + cant*precioIva);
         lblTotal.setBounds(467, 10, 100, 15);
         lblTotal.setForeground(Color.RED);
@@ -255,7 +256,7 @@ public class Productos {
         
        final int []cantA = {cant};
         
-        final JButton btnMenos = new JButton(new ImageIcon("/home/quique/git/ProyectoEntornos/src/menos.png"));
+        final JButton btnMenos = new JButton(new ImageIcon("src/menos.png"));
         btnMenos.addActionListener(new ActionListener() {
 			
 			@Override
@@ -263,7 +264,7 @@ public class Productos {
 				int k = -1;
 				for (int j = 0; j < GuiCliente.getCesta().size(); j++) {
 					if(GuiCliente.getCesta().get(j).getCodigo() == codigo){
-						k = i;
+						k = j;
 						break;
 					}
 				}
@@ -274,7 +275,9 @@ public class Productos {
 			        lblTotal.setText("Total: " + cantA[0]*precioIva);
 			        stock++;
 			        if(cantA[0] == 0){
-			        	//ELIMINAR EL JPNAEL
+						panel.removeAll();
+						panel.repaint();
+						panel.setVisible(false);
 			        }
 				}
 			}
@@ -282,15 +285,15 @@ public class Productos {
         btnMenos.setBounds(620, 35, 30, 30);
         panel.add(btnMenos);
         
-        final JButton btnMas = new JButton(new ImageIcon("/home/quique/git/ProyectoEntornos/src/mas.png"));
+        final JButton btnMas = new JButton(new ImageIcon("src/mas.png"));
         btnMas.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int k = -1;
-				for (int j = 0; j < GuiCliente.getCesta().size(); j++) {
+				for (int j = 0; j < GuiCliente.getProductos().size(); j++) {
 					if(GuiCliente.getProductos().get(j).getCodigo() == codigo){
-						k = i;
+						k = j;
 						break;
 					}
 				}
@@ -312,7 +315,7 @@ public class Productos {
         btnMas.setBounds(655, 35, 30, 30);
         panel.add(btnMas);
         
-        final JButton btnEliminar = new JButton(new ImageIcon("/home/quique/git/ProyectoEntornos/src/papelera.png"));
+        final JButton btnEliminar = new JButton(new ImageIcon("src/papelera.png"));
         btnEliminar.addActionListener(new ActionListener() {
 			
 			@Override
@@ -328,7 +331,7 @@ public class Productos {
 				cantA[0] = 0;
 				panel.removeAll();
 				panel.repaint();
-			//	panel = null;
+				panel.setVisible(false);
 			}
 		});
         btnEliminar.setBounds(690, 35, 30, 30);
