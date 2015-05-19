@@ -1,16 +1,23 @@
 package app;
 
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
@@ -73,7 +80,7 @@ public class Tickets {
 		
 		JCheckBox checkBox = new JCheckBox("");
 		
-		JLabel lblCodigo = new JLabel("");
+		final JLabel lblCodigo = new JLabel("");
 		lblCodigo.setBounds(54, 12, 180, 15);
 		panel.add(lblCodigo);
 		checkBox.setBounds(12, 4, 21, 30);
@@ -88,6 +95,13 @@ public class Tickets {
 		panel.add(lblFacturado);
 		
 		JButton btnDetalles = new JButton("Detalles");
+		btnDetalles.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				detalles(lblCodigo.getText());
+			}
+		});
 		btnDetalles.setBounds(655, 6, 117, 25);
 		panel.add(btnDetalles);
 		
@@ -100,5 +114,70 @@ public class Tickets {
 		}
 		
 		return panel;
+	}
+	static void detalles(String codigo){
+		JFrame frame = new JFrame("Ticket " + codigo);
+		JPanel panel = new JPanel();
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.add(panel);
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		
+		JLabel lblTicket = new JLabel("Ticket: " + codigo);
+		lblTicket.setFont(new Font("Dialog", Font.BOLD, 16));
+		panel.add(lblTicket);
+		
+		JLabel lblArticulos = new JLabel("Articulos: ");
+		lblArticulos.setFont(new Font("Dialog", Font.BOLD, 14));
+		panel.add(lblArticulos);
+		
+		JLabel lblFecha = new JLabel("Fecha: ");
+		lblFecha.setFont(new Font("Dialog", Font.BOLD, 14));
+		panel.add(lblFecha);
+		
+		String[][] data = null;
+		int cant = 0, total = 0;
+		ResultSet rs;
+		try {
+			rs = TpvMain.db.createStatement().executeQuery("select count(*) from LineasTicket where cod_ticket ='" + codigo + "';");
+			rs.absolute(1);
+			data = new String[rs.getInt(1)][7];
+			rs = TpvMain.db.createStatement().executeQuery("select * from LineasTicket where cod_ticket ='" + codigo + "';");
+			while(rs.next()){
+				data[rs.getRow()-1] = LineaTicket.get(rs, 7);
+				total += rs.getDouble(8);
+				cant += rs.getDouble(6);
+			}
+			rs = TpvMain.db.createStatement().executeQuery("select fecha from Tickets where codigo = '" + codigo + "';");
+			rs.absolute(1);
+			lblFecha.setText(lblFecha.getText() + rs.getString(1));
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	    Object[] colum = {"Linea", "Producto", "Descripcion", "Precio","Cant.","IVA","TOTAL"};
+	    
+	    JTable table = new JTable(data, colum);
+	    JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(79, 52, 600, 50);
+		panel.add(scrollPane);
+
+		table.setRowSelectionAllowed(false);
+		table.setShowVerticalLines(false);
+		table.setEnabled(false);
+		scrollPane.setViewportView(table);
+		
+		JLabel lblTotal = new JLabel("Total: " + total + " €");
+		lblTotal.setFont(new Font("Dialog", Font.BOLD, 16));
+		panel.add(lblTotal);
+		
+		lblArticulos.setText(lblArticulos.getText() + cant);
+		
+		frame.pack();
+		frame.setVisible(true);
+		
+		
 	}
 }

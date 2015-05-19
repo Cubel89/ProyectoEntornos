@@ -27,6 +27,7 @@ public class GuiCliente extends JPanel {
 	protected JMenu opciones = TpvMain.menuBar.getMenu(1);
 	private static ArrayList<Productos> productos = new ArrayList<Productos>();
 	private static ArrayList<Productos> cesta = new ArrayList<Productos>();
+//	private static ArrayList<Tickets> tickets = new ArrayList<Tickets>();
 	
 	public GuiCliente(String user) {
 		setLayout(null);
@@ -117,8 +118,6 @@ public class GuiCliente extends JPanel {
         add(txtBuscar).setBounds(470, 33, 240,20);
         add(btnBuscar).setBounds(720, 33, 100,20);
         
-        
-        
         final JPanel panelScroll = scrolling();
         
 		listarProductos(panelScroll, txtBuscar.getText());
@@ -164,13 +163,18 @@ public class GuiCliente extends JPanel {
 		removeAll();
 		repaint();
 		
+		JLabel lblCesta = new JLabel("Mi Cesta");
+		lblCesta.setFont(new Font("Dialog", Font.BOLD, 29));
+		lblCesta.setBounds(20, 10, 360, 45);
+		add(lblCesta);
+		
 		JButton btnHacerPedido = new JButton("Realizar pedido");
 		btnHacerPedido.setFont(new Font("Dialog", Font.BOLD, 16));
 		btnHacerPedido.setBackground(new Color(0, 255, 0));
 		btnHacerPedido.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(cesta.size() > 0){
-					Tickets ticket = new Tickets(user, cesta);
+					new Tickets(user, cesta);
 					cesta.clear();
 					tickets();
 				} else {
@@ -209,6 +213,31 @@ public class GuiCliente extends JPanel {
 	void tickets(){
 		removeAll();
 		repaint();
+		final ArrayList<Tickets> tickets = new ArrayList<Tickets>();
+		
+		
+		JLabel lblTickets = new JLabel("Mis tickets");
+		lblTickets.setFont(new Font("Dialog", Font.BOLD, 29));
+		lblTickets.setBounds(20, 10, 360, 45);
+		add(lblTickets);
+		
+		JButton btnFactura = new JButton("Solicitar factura");
+		btnFactura.setFont(new Font("Dialog", Font.BOLD, 16));
+		btnFactura.setBackground(new Color(0, 255, 0));
+		btnFactura.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(cesta.size() > 0){
+				//	new Tickets(user, cesta);
+					facturas();
+				} else {
+					JOptionPane.showMessageDialog(null, "Selecciona como minimo un ticket");
+				}
+			}
+		});
+		btnFactura.setBounds(590, 10, 230, 45);
+		add(btnFactura);
+		
+		
 		JPanel panel = scrolling();
 		
 		
@@ -224,27 +253,7 @@ public class GuiCliente extends JPanel {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		JLabel lblNewLabel = new JLabel("Mis tickets");
-		lblNewLabel.setFont(new Font("Dialog", Font.BOLD, 29));
-		lblNewLabel.setBounds(20, 10, 360, 45);
-		add(lblNewLabel);
 		
-		JButton btnFactura = new JButton("Solicitar factura");
-		btnFactura.setFont(new Font("Dialog", Font.BOLD, 16));
-		btnFactura.setBackground(new Color(0, 255, 0));
-		btnFactura.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				if(cesta.size() > 0){
-					new Tickets(user, cesta);
-					cesta.clear();
-					tickets();
-				} else {
-					JOptionPane.showMessageDialog(null, "Selecciona como minimo un ticket");
-				}
-			}
-		});
-		btnFactura.setBounds(590, 10, 230, 45);
-		add(btnFactura);
 	}
 	void facturas(){
 		removeAll();
