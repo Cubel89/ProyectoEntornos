@@ -8,21 +8,6 @@ import javax.swing.JOptionPane;
 
 public class Usuarios {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-//	private String user, pass, dni, nombre, ape, domicilio;
-/*	private GregorianCalendar fechaAlta;
-	private int nivel;
-	private JTextField txt_user;
-	private JPasswordField txt_pass;
-	private JTextField txt_nombre;
-	private JTextField txt_dni;
-	private JTextField txt_ape;
-	private JTextField txt_domicilio;
-	*/
-
 	public Usuarios(String user,String pass,String dni,String nombre,String ape,String domicilio, int nivel){
 		boolean ok = false;
 		ResultSet rs = null;
@@ -127,5 +112,19 @@ public class Usuarios {
 			JOptionPane.showMessageDialog(null, "Se ha producido un error.");
 		}
 		return usuario;
+	}
+	public static boolean existe(String usuario){
+		ResultSet rs;
+		try {
+			rs = TpvMain.db.createStatement().executeQuery("select usuario from Usuarios where usuario = '" + usuario + "'");
+			if(rs.absolute(1)){
+				return true;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		JOptionPane.showMessageDialog(null, "El usuario no existe");
+		return false;
 	}
 }

@@ -1,4 +1,4 @@
-package app;
+package pruebas;
 
 import java.awt.EventQueue;
 import java.awt.Font;
@@ -22,7 +22,12 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
 
-public class TpvMain extends JFrame {
+import app.GuiAdmin;
+import app.GuiCliente;
+import app.MySQL;
+import app.Usuarios;
+
+public class CopyOfTpvMain extends JFrame {
 
 	/**
 	 * 
@@ -31,8 +36,7 @@ public class TpvMain extends JFrame {
 	private static JPanel content = new JPanel();
 	static Connection db = MySQL.Connectar();
 	public static JMenuBar menuBar;
-	public static TpvMain frame = null;
-	private JMenuItem mntmDesconectar;
+	public static CopyOfTpvMain frame = null;
 	/**
 	 * Launch the application.
 	 */
@@ -40,8 +44,9 @@ public class TpvMain extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					frame= new TpvMain();
+					frame= new CopyOfTpvMain();
 					frame.setVisible(true);
+					frame.setSize(630, 360);
 			//		frame.pack();
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -53,71 +58,14 @@ public class TpvMain extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public TpvMain() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(TpvMain.class.getResource("/com/sun/java/swing/plaf/windows/icons/DetailsView.gif")));
+	public CopyOfTpvMain() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(CopyOfTpvMain.class.getResource("/com/sun/java/swing/plaf/windows/icons/DetailsView.gif")));
 		getContentPane().setFont(new Font("Dialog", Font.PLAIN, 12));
 		setTitle("TPV");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
-		
-		
-	//	contentPane.add(menuBar, BorderLayout.NORTH);
-		
-		JMenu mnArchivo = new JMenu("Archivo");
-		menuBar.add(mnArchivo);
-		
-		JMenuItem mntmCerrar = new JMenuItem("Cerrar");
-		mntmCerrar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				System.exit(ABORT);
-			}
-		});
-		
-		mnArchivo.add(mntmCerrar);
-		
-		JMenu mnOpciones = new JMenu("Opciones");
-		menuBar.add(mnOpciones);
-		
-		JMenuItem mntmCrearCuenta = new JMenuItem("Crear cuenta");
-		mntmCrearCuenta.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				registro();
-			}
-		});
-		mnOpciones.add(mntmCrearCuenta);
-		
-		JMenu mnAyuda = new JMenu("Ayuda");
-		menuBar.add(mnAyuda);
-		
-		JMenuItem mntmAcercaDe = new JMenuItem("Acerca de");
-		mntmAcercaDe.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				acercaDe();
-			}
-		});
-		mnAyuda.add(mntmAcercaDe);
-		
-		mntmDesconectar = new JMenuItem("Desconectar");
-		menuBar.getMenu(0).add(mntmDesconectar);
-		
-		mntmDesconectar.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				content.removeAll();
-				content.repaint();
-				panelLogin();
-				
-			}
-		});
-
-		panelLogin();
-	}
-	void panelLogin(){
-
-		setSize(630, 360);
 		content.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(content);
 		content.setSize(400,250);
@@ -176,7 +124,43 @@ public class TpvMain extends JFrame {
 		lblh1.setBounds(136, 12, 346, 38);
 		login.add(lblh1);
 		
-		mntmDesconectar.setVisible(false);
+	//	contentPane.add(menuBar, BorderLayout.NORTH);
+		
+		JMenu mnArchivo = new JMenu("Archivo");
+		menuBar.add(mnArchivo);
+		
+		JMenuItem mntmCerrar = new JMenuItem("Cerrar");
+		mntmCerrar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.exit(ABORT);
+			}
+		});
+		
+				
+		
+		mnArchivo.add(mntmCerrar);
+		
+		JMenu mnOpciones = new JMenu("Opciones");
+		menuBar.add(mnOpciones);
+		
+		JMenuItem mntmCrearCuenta = new JMenuItem("Crear cuenta");
+		mntmCrearCuenta.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				registro();
+			}
+		});
+		mnOpciones.add(mntmCrearCuenta);
+		
+		JMenu mnAyuda = new JMenu("Ayuda");
+		menuBar.add(mnAyuda);
+		
+		JMenuItem mntmAcercaDe = new JMenuItem("Acerca de");
+		mntmAcercaDe.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				acercaDe();
+			}
+		});
+		mnAyuda.add(mntmAcercaDe);
 	}
 	void login(String user, char [] pass){
 		try {
@@ -188,11 +172,22 @@ public class TpvMain extends JFrame {
 				JOptionPane.showMessageDialog(null, "Bienvenido " + user + ", te has identificado correctamente");
 				
 				menuBar.getMenu(1).removeAll();
+				JMenuItem mntmDesconectar = new JMenuItem("Desconectar");
+				menuBar.getMenu(0).add(mntmDesconectar);
 				
+				mntmDesconectar.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						frame.dispose();
+						frame = new CopyOfTpvMain();
+						frame.setVisible(true);
+						frame.setSize(630, 360);
+						
+					}
+				});
 				content.removeAll();
 				content.repaint();
-
-				mntmDesconectar.setVisible(true);
 				switch (select.getInt("nivel")) {
 					case 0:
 						content.add(new GuiCliente(user));

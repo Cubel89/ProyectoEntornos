@@ -1,17 +1,27 @@
 package app;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 
 public class GuiAdmin extends GuiCliente {
@@ -40,13 +50,27 @@ public class GuiAdmin extends GuiCliente {
 		gestionUsuarios(opciones);
 		gestionProductos(opciones);
 		
+		JMenuItem btnTickets = new JMenuItem("Consultar tickets");
+		btnTickets.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				tickets();
+				
+			}
+		});
+		opciones.add(btnTickets);
 		
-		opciones.add(new JSeparator());
-		JMenuItem mntmImportar = new JMenuItem("Importar");
-		opciones.add(mntmImportar);
-		
-		JMenuItem mntmExportar = new JMenuItem("Exportar");
-		opciones.add(mntmExportar);
+		JMenuItem btnFacturas = new JMenuItem("Consultar facturas");
+		btnFacturas.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				facturas();
+				
+			}
+		});
+		opciones.add(btnFacturas);
 	/*	
 		opciones.add(separator);
 		JMenuItem mntmPanelUser = new JMenuItem("Acceder como cliente");
@@ -768,5 +792,252 @@ public class GuiAdmin extends GuiCliente {
 				}
 			}
 		});
+	}
+	void tickets(){
+		removeAll();
+		repaint();
+		final ArrayList<Tickets> tickets = new ArrayList<Tickets>();
+		
+		
+		JLabel lblTickets = new JLabel("Consultar tickets");
+		lblTickets.setFont(new Font("Dialog", Font.BOLD, 29));
+		lblTickets.setBounds(20, 10, 360, 45);
+		add(lblTickets);
+		
+		JButton btnListados = new JButton("Hacer un listado");
+		btnListados.setFont(new Font("Dialog", Font.BOLD, 16));
+		btnListados.setBackground(new Color(0, 255, 0));
+		btnListados.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				listados();
+			}
+		});
+		btnListados.setBounds(590, 10, 230, 45);
+		add(btnListados);
+		JPanel panel = scrolling();
+		
+		
+		
+		ResultSet rs;
+		try {
+			rs = TpvMain.db.createStatement().executeQuery("select * from Tickets order by fecha desc;");
+			while (rs.next()) {
+				tickets.add(new Tickets(rs));
+				panel.add(tickets.get(tickets.size()-1).ver());
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	void facturas(){
+		removeAll();
+		repaint();
+		removeAll();
+		repaint();
+		final ArrayList<Facturas> facturas = new ArrayList<Facturas>();
+	//	final ArrayList<Tickets> tickets = new ArrayList<Tickets>();
+		
+		
+		JLabel lblFacturas = new JLabel("Consultar facturas");
+		lblFacturas.setFont(new Font("Dialog", Font.BOLD, 29));
+		lblFacturas.setBounds(20, 10, 360, 45);
+		add(lblFacturas);
+		
+		
+		JPanel panel = scrolling();
+		
+		
+		
+		ResultSet rs;
+		try {
+			rs = TpvMain.db.createStatement().executeQuery("SELECT DISTINCT f.* FROM Facturas f, Tickets t where t.num_factura = f.numero order by numero desc;");
+			while (rs.next()) {
+				facturas.add(new Facturas(rs));
+			}
+			for (int i = 0; i < facturas.size(); i++) {
+				panel.add(facturas.get(i).ver());
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	void listados(){
+		removeAll();
+		repaint();
+		final JTextField fInicio;
+		final JTextField fFin;
+		
+		final ButtonGroup buttonGroup = new ButtonGroup();
+		
+		final JRadioButton rdbtnListadoDeVentas = new JRadioButton("Listado de ventas realizadas agrupadas por clientes");
+		buttonGroup.add(rdbtnListadoDeVentas);
+		rdbtnListadoDeVentas.setSelected(true);
+		rdbtnListadoDeVentas.setBounds(8, 0, 426, 15);
+		add(rdbtnListadoDeVentas);
+		
+		final JRadioButton rdbtnListadoDeVentas_1 = new JRadioButton("Listado de ventas realizadas a un cliente");
+		buttonGroup.add(rdbtnListadoDeVentas_1);
+		rdbtnListadoDeVentas_1.setBounds(8, 19, 426, 15);
+		add(rdbtnListadoDeVentas_1);
+		
+		final JRadioButton rdbtnRankingDeProductos = new JRadioButton("Ranking de productos mas vendidos");
+		buttonGroup.add(rdbtnRankingDeProductos);
+		rdbtnRankingDeProductos.setBounds(8, 38, 426, 15);
+		add(rdbtnRankingDeProductos);
+		
+		JLabel lblFechaInicio = new JLabel("Fecha inicio:");
+		lblFechaInicio.setBounds(548, 0, 88, 15);
+		add(lblFechaInicio);
+		
+		JLabel lblFechaFin = new JLabel("Fecha fin:");
+		lblFechaFin.setBounds(548, 19, 88, 15);
+		add(lblFechaFin);
+		
+		fInicio = new JTextField();
+		fInicio.setText("2015-05-01");
+		fInicio.setBounds(654, 0, 88, 15);
+		add(fInicio);
+		fInicio.setColumns(10);
+		
+		fFin = new JTextField();
+		fFin.setText("2015-05-22");
+		fFin.setBounds(654, 19, 88, 15);
+		add(fFin);
+		fFin.setColumns(10);
+		
+		final JPanel panel = scrolling();
+		
+		JButton btnListar = new JButton("Listar");
+		btnListar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				panel.removeAll();
+				panel.repaint();
+				if(rdbtnListadoDeVentas.isSelected()){
+					listadoVentas(panel, fInicio.getText(), fFin.getText());
+				} else if(rdbtnListadoDeVentas_1.isSelected()){
+					listadoVentasCliente(panel, fInicio.getText(), fFin.getText());
+				} else if(rdbtnRankingDeProductos.isSelected()){
+					listadoRanking(panel, fInicio.getText(), fFin.getText());
+				}
+				
+			}
+		});
+		btnListar.setBounds(590, 38, 104, 15);
+		add(btnListar);
+		
+		
+		
+	}
+	void listadoVentas(JPanel panel, String fInicio, String fFin){
+		
+		String sql = "SELECT * FROM tpv.Tickets where fecha >= '" + fInicio + "' and fecha <='" + fFin + "' order by cod_cliente, fecha desc;";
+		String[][] data = null;
+		ResultSet rs;
+		try {
+			rs = TpvMain.db.createStatement().executeQuery(sql);
+			rs.last();
+			data = new String[rs.getRow()][4];
+			rs.absolute(0);
+			while(rs.next()){
+				for (int i = 0; i < data[rs.getRow()-1].length; i++) {
+					data[rs.getRow()-1][i] = rs.getString(i+1);
+				}
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	    Object[] colum = {"Codigo", "Cliente", "Fecha", "Factura"};
+	    JTable table = new JTable(data, colum);
+	    JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(79, 52, 600, 50);
+		panel.add(scrollPane);
+
+		table.setRowSelectionAllowed(false);
+		table.setShowVerticalLines(false);
+		table.setEnabled(false);
+		scrollPane.setViewportView(table);
+	}
+	
+	void listadoVentasCliente(JPanel panel,  String fInicio, String fFin){
+		String sql = "";
+		String cliente;
+		do {
+			cliente = JOptionPane.showInputDialog("Nombre de usuario:");
+		} while (!Usuarios.existe(cliente));
+		sql = "SELECT * FROM tpv.Tickets where cod_cliente ='" + cliente + "' and fecha >= '" + fInicio + "' and fecha <='" + fFin + "' order by fecha desc;";
+		String[][] data = null;
+		ResultSet rs;
+		try {
+			rs = TpvMain.db.createStatement().executeQuery(sql);
+			rs.last();
+			data = new String[rs.getRow()][4];
+			rs.absolute(0);
+			while(rs.next()){
+				for (int i = 0; i < data[rs.getRow()-1].length; i++) {
+					data[rs.getRow()-1][i] = rs.getString(i+1);
+				}
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	    Object[] colum = {"Codigo", "Cliente", "Fecha", "Factura"};
+	    JTable table = new JTable(data, colum);
+	    JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(79, 52, 600, 50);
+		panel.add(scrollPane);
+
+		table.setRowSelectionAllowed(false);
+		table.setShowVerticalLines(false);
+		table.setEnabled(false);
+		scrollPane.setViewportView(table);
+	}
+	
+	void listadoRanking(JPanel panel,  String fInicio, String fFin){
+		String sql = "SELECT sum(lt.cantidad), p.* FROM LineasTicket lt, Productos p, Tickets t where p.codigo = lt.cod_producto and lt.cod_ticket = t.codigo and t.fecha >= '" + fInicio + "' and t.fecha <='" + fFin + "' group by lt.cod_producto order by 1 desc;";
+		String[][] data = null;
+		ResultSet rs;
+		try {
+			rs = TpvMain.db.createStatement().executeQuery(sql);
+			rs.last();
+			data = new String[rs.getRow()][7];
+			rs.absolute(0);
+			while(rs.next()){
+				for (int i = 0; i < data[rs.getRow()-1].length; i++) {
+					data[rs.getRow()-1][i] = rs.getString(i+1);
+				}
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	    Object[] colum = {"Cantidad", "Producto", "Descripcion", "Precio","IVA","Precio con IVA", "STOCK"};
+	    
+	    JTable table = new JTable(data, colum);
+	    JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(79, 52, 600, 50);
+		panel.add(scrollPane);
+
+		table.setRowSelectionAllowed(false);
+		table.setShowVerticalLines(false);
+		table.setEnabled(false);
+		scrollPane.setViewportView(table);
 	}
 }

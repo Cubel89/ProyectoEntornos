@@ -22,9 +22,9 @@ import javax.swing.JTable;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
 public class Tickets {
-	String codigo;
-	ArrayList<LineaTicket> linea;
-	
+	private String codigo, fecha, facturado;
+	private ArrayList<LineaTicket> linea;
+	private JCheckBox checkBox;
 
 	public Tickets(String user, ArrayList<Productos> cesta) {
 		String year = Integer.toString(GregorianCalendar.getInstance().get(GregorianCalendar.YEAR));
@@ -72,6 +72,57 @@ public class Tickets {
 			System.out.println(e);
 		}
 	}
+	public Tickets(ResultSet rs){
+		try {
+			this.codigo = rs.getString(1);
+			this.fecha = rs.getString(3);
+			this.facturado = (rs.getString(4) != null)? rs.getString(4): "No";
+			this.checkBox = new JCheckBox("");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	public JPanel ver(){
+		JPanel panel = new JPanel();
+		panel.setLayout(null);
+		
+		panel.setPreferredSize(new Dimension(790,40));
+		
+		final JLabel lblCodigo = new JLabel(codigo);
+		lblCodigo.setBounds(54, 12, 180, 15);
+		panel.add(lblCodigo);
+		
+		checkBox.setBounds(12, 4, 21, 30);
+		panel.add(checkBox);
+		
+		JLabel lblFecha = new JLabel(fecha);
+		lblFecha.setBounds(276, 12, 131, 15);
+		panel.add(lblFecha);
+		
+		JLabel lblFacturado = new JLabel(facturado);
+		lblFacturado.setBounds(481, 12, 118, 15);
+		panel.add(lblFacturado);
+		
+		JButton btnDetalles = new JButton("Detalles");
+		btnDetalles.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				detalles(lblCodigo.getText());
+			}
+		});
+		btnDetalles.setBounds(655, 6, 117, 25);
+		panel.add(btnDetalles);
+		
+		if(!facturado.equalsIgnoreCase("no")){
+			checkBox.setEnabled(false);
+		}
+		
+		return panel;
+	}
+	/*
 	public static JPanel ver(ResultSet rs){
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
@@ -115,6 +166,7 @@ public class Tickets {
 		
 		return panel;
 	}
+	*/
 	static void detalles(String codigo){
 		JFrame frame = new JFrame("Ticket " + codigo);
 		JPanel panel = new JPanel();
@@ -130,13 +182,25 @@ public class Tickets {
 		lblArticulos.setFont(new Font("Dialog", Font.BOLD, 14));
 		panel.add(lblArticulos);
 		
+		ResultSet rs;
+		try {
+			rs = TpvMain.db.createStatement().executeQuery("select cod_cliente from Tickets where codigo = '" + codigo + "';");
+			rs.absolute(1);
+			JLabel lblCliente = new JLabel("Cliente: " + rs.getString(1));
+			lblCliente.setFont(new Font("Dialog", Font.BOLD, 14));
+			panel.add(lblCliente);
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		
 		JLabel lblFecha = new JLabel("Fecha: ");
 		lblFecha.setFont(new Font("Dialog", Font.BOLD, 14));
 		panel.add(lblFecha);
 		
 		String[][] data = null;
 		int cant = 0, total = 0;
-		ResultSet rs;
 		try {
 			rs = TpvMain.db.createStatement().executeQuery("select count(*) from LineasTicket where cod_ticket ='" + codigo + "';");
 			rs.absolute(1);
@@ -180,4 +244,104 @@ public class Tickets {
 		
 		
 	}
+	JPanel detallesFactura(){
+	//	JFrame frame = new JFrame("Ticket " + codigo);
+		JPanel panel = new JPanel();
+	//	frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+	//	frame.add(panel);
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		
+		JLabel lblTicket = new JLabel("Ticket: " + codigo);
+		lblTicket.setFont(new Font("Dialog", Font.BOLD, 16));
+		panel.add(lblTicket);
+		
+		String[][] data = null;
+//		int cant = 0, total = 0;
+		ResultSet rs;
+		try {
+			rs = TpvMain.db.createStatement().executeQuery("select count(*) from LineasTicket where cod_ticket ='" + codigo + "';");
+			rs.absolute(1);
+			data = new String[rs.getInt(1)][7];
+			rs = TpvMain.db.createStatement().executeQuery("select * from LineasTicket where cod_ticket ='" + codigo + "';");
+			while(rs.next()){
+				data[rs.getRow()-1] = LineaTicket.get(rs, 7);
+	//			total += rs.getDouble(8);
+	//			cant += rs.getDouble(6);
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	    Object[] colum = {"Linea", "Producto", "Descripcion", "Precio","Cant.","IVA","TOTAL"};
+	    
+	    JTable table = new JTable(data, colum);
+	    JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(79, 52, 600, 50);
+		panel.add(scrollPane);
+
+		table.setRowSelectionAllowed(false);
+		table.setShowVerticalLines(false);
+		table.setEnabled(false);
+		scrollPane.setViewportView(table);
+		
+		
+		return panel;
+		
+		
+	}
+	public double getTotal(){
+		double total = 0;
+		ResultSet rs;
+		try {
+			rs = TpvMain.db.createStatement().executeQuery("select total from LineasTicket where cod_ticket = '" + codigo + "';");
+			while (rs.next()) {
+				total += rs.getDouble(1);
+				
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return total;
+	}
+	public String getCodigo() {
+		return codigo;
+	}
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
+	}
+	public String getFecha() {
+		return fecha;
+	}
+	public void setFecha(String fecha) {
+		this.fecha = fecha;
+	}
+	public String getFacturado() {
+		return facturado;
+	}
+	public void setFacturado(String facturado) {
+		this.facturado = facturado;
+	}
+	public ArrayList<LineaTicket> getLinea() {
+		return linea;
+	}
+	public void setLinea(ArrayList<LineaTicket> linea) {
+		this.linea = linea;
+	}
+	public JCheckBox getCheckBox() {
+		return checkBox;
+	}
+	public void setCheckBox(JCheckBox checkBox) {
+		this.checkBox = checkBox;
+	}
+	@Override
+	public String toString() {
+		return "Tickets [codigo=" + codigo + ", fecha=" + fecha
+				+ ", facturado=" + facturado + ", linea=" + linea + "]";
+	}
+	
+	
 }
