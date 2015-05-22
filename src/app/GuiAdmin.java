@@ -1,6 +1,7 @@
 package app;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -55,7 +56,7 @@ public class GuiAdmin extends GuiCliente {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				tickets();
+				ticketsAdmin();
 				
 			}
 		});
@@ -66,7 +67,7 @@ public class GuiAdmin extends GuiCliente {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				facturas();
+				facturasAdmin();
 				
 			}
 		});
@@ -793,7 +794,7 @@ public class GuiAdmin extends GuiCliente {
 			}
 		});
 	}
-	void tickets(){
+	void ticketsAdmin(){
 		removeAll();
 		repaint();
 		final ArrayList<Tickets> tickets = new ArrayList<Tickets>();
@@ -832,7 +833,7 @@ public class GuiAdmin extends GuiCliente {
 		}
 		
 	}
-	void facturas(){
+	void facturasAdmin(){
 		removeAll();
 		repaint();
 		removeAll();
@@ -910,9 +911,15 @@ public class GuiAdmin extends GuiCliente {
 		add(fFin);
 		fFin.setColumns(10);
 		
-		final JPanel panel = scrolling();
 		
 		JButton btnListar = new JButton("Listar");
+		
+		btnListar.setBounds(590, 38, 104, 15);
+		add(btnListar);
+		
+
+		final JPanel panel = scrolling();
+		
 		btnListar.addActionListener(new ActionListener() {
 			
 			@Override
@@ -929,10 +936,6 @@ public class GuiAdmin extends GuiCliente {
 				
 			}
 		});
-		btnListar.setBounds(590, 38, 104, 15);
-		add(btnListar);
-		
-		
 		
 	}
 	void listadoVentas(JPanel panel, String fInicio, String fFin){
@@ -1039,5 +1042,6 @@ public class GuiAdmin extends GuiCliente {
 		table.setShowVerticalLines(false);
 		table.setEnabled(false);
 		scrollPane.setViewportView(table);
+	//	scrollPane.setPreferredSize(new Dimension(700, 400));
 	}
 }

@@ -233,9 +233,21 @@ public class GuiCliente extends JPanel {
 						checks.add(tickets.get(i));
 					}
 				}
+				boolean fiscal = true;
+				for (int i = 1; i < tickets.size(); i++) {
+					if(!checks.get(0).getFecha().substring(0, 4).equals(checks.get(i).getFecha().substring(0, 4))){
+						fiscal = false;
+						break;
+					}
+				}
+				
 				if(checks.size() > 0){
-					new Facturas(checks);
-					facturas();
+					if(fiscal){
+						new Facturas(checks);
+						facturas();
+					} else {
+						JOptionPane.showMessageDialog(null, "No se pueden facturar los tickets porque no son del mismo periodo fiscal.");
+					}
 				} else {
 					JOptionPane.showMessageDialog(null, "Selecciona como minimo un ticket");
 				}
