@@ -80,14 +80,6 @@ public class TpvMain extends JFrame {
 		JMenu mnOpciones = new JMenu("Opciones");
 		menuBar.add(mnOpciones);
 		
-		JMenuItem mntmCrearCuenta = new JMenuItem("Crear cuenta");
-		mntmCrearCuenta.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				registro();
-			}
-		});
-		mnOpciones.add(mntmCrearCuenta);
-		
 		JMenu mnAyuda = new JMenu("Ayuda");
 		menuBar.add(mnAyuda);
 		
@@ -116,7 +108,7 @@ public class TpvMain extends JFrame {
 		panelLogin();
 	}
 	void panelLogin(){
-
+		menuBar.getMenu(1).removeAll();
 		setSize(630, 360);
 		content.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(content);
@@ -175,6 +167,16 @@ public class TpvMain extends JFrame {
 		lblh1.setFont(new Font("Dialog", Font.BOLD, 32));
 		lblh1.setBounds(136, 12, 346, 38);
 		login.add(lblh1);
+		
+		
+		
+		JMenuItem mntmCrearCuenta = new JMenuItem("Crear cuenta");
+		mntmCrearCuenta.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				registro();
+			}
+		});
+		menuBar.getMenu(1).add(mntmCrearCuenta);
 		
 		mntmDesconectar.setVisible(false);
 	}
