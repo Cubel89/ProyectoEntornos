@@ -168,7 +168,7 @@ public class Facturas {
 		lblArticulos.setText(lblArticulos.getText() + cant);
 		*/
 
-		JLabel lblTotal = new JLabel("Total: " + Math.round(total*100));
+		JLabel lblTotal = new JLabel("Total: " + total);
 		lblTotal.setFont(new Font("Dialog", Font.BOLD, 14));
 		panel.add(lblTotal);
 		

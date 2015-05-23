@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -32,7 +33,7 @@ public class GuiCliente extends JPanel {
 	
 	public GuiCliente(String user) {
 		setLayout(null);
-		TpvMain.frame.setSize(860, 510);
+		TpvMain.frame.setSize(840, 490);
 		setSize(850, 500);
 		this.user = user;
 		
@@ -96,8 +97,8 @@ public class GuiCliente extends JPanel {
 		
 		JLabel hola = new JLabel("Hola, " + user);
         JLabel infoCesta = new JLabel("Tienes " + cesta.size() + " productos en la cesta.");
-        add(hola).setBounds(10, 10, 300, 20);;
-        add(infoCesta).setBounds(10, 35, 300, 20);
+        add(hola).setBounds(20, 20, 300, 20);
+        add(infoCesta).setBounds(20, 50, 300, 20);
         
         JButton btnCesta = new JButton("Ir a la cesta");
         btnCesta.addActionListener(new ActionListener() {
@@ -108,16 +109,16 @@ public class GuiCliente extends JPanel {
 				
 			}
 		});
-        add(btnCesta).setBounds(620,10,200,20);
+        add(btnCesta).setBounds(620,10,200,45);
         btnCesta.setBackground(Color.orange);
         
         final JTextField txtBuscar = new JTextField("");
         JLabel lblBuscar = new JLabel("Buscar");
         JButton btnBuscar = new JButton("Buscar");
 		
-        add(lblBuscar).setBounds(380, 33, 80,20);
-        add(txtBuscar).setBounds(470, 33, 240,20);
-        add(btnBuscar).setBounds(720, 33, 100,20);
+        add(lblBuscar).setBounds(380, 65, 80,20);
+        add(txtBuscar).setBounds(470, 65, 240,20);
+        add(btnBuscar).setBounds(720, 65, 100,20);
         
         final JPanel panelScroll = scrolling();
         
@@ -127,6 +128,8 @@ public class GuiCliente extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				panelScroll.removeAll();
+				panelScroll.repaint();
 				listarProductos(panelScroll, txtBuscar.getText());
 			}
 		});
@@ -140,18 +143,18 @@ public class GuiCliente extends JPanel {
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
      //   scrollPane.setAutoscrolls(true);
-        scrollPane.setBounds(10, 30, 800, 380);
+        scrollPane.setBounds(10, 0, 800, 340);
       
         JPanel contentPane = new JPanel(null);
-        contentPane.setPreferredSize(new Dimension(800, 380));
+        contentPane.setPreferredSize(new Dimension(800, 460));
         contentPane.add(scrollPane);
         
-        add(contentPane).setBounds(10, 30, 830, 410);
+        add(contentPane).setBounds(10, 90, 830, 540);
         return panelScroll;
 	}
 	void listarProductos(JPanel panel, String buscar){
-		panel.removeAll();
-		panel.repaint();
+	//	panel.removeAll();
+	//	panel.repaint();
 		for (int i = 0, color = 0; i < productos.size(); i++) {
 			if(productos.get(i).getDescripcion().indexOf(buscar) != -1
 					|| Integer.toString(productos.get(i).getCodigo()).indexOf(buscar) != -1){
@@ -166,7 +169,7 @@ public class GuiCliente extends JPanel {
 		
 		JLabel lblCesta = new JLabel("Mi Cesta");
 		lblCesta.setFont(new Font("Dialog", Font.BOLD, 29));
-		lblCesta.setBounds(20, 10, 360, 45);
+		lblCesta.setBounds(20, 20, 360, 45);
 		add(lblCesta);
 		
 		JButton btnHacerPedido = new JButton("Realizar pedido");
@@ -183,7 +186,7 @@ public class GuiCliente extends JPanel {
 				}
 			}
 		});
-		btnHacerPedido.setBounds(590, 10, 230, 45);
+		btnHacerPedido.setBounds(590, 20, 230, 45);
 		add(btnHacerPedido);
 		
 		final JPanel panel = scrolling();
@@ -234,8 +237,11 @@ public class GuiCliente extends JPanel {
 					}
 				}
 				boolean fiscal = true;
-				for (int i = 1; i < tickets.size(); i++) {
-					if(!checks.get(0).getFecha().substring(0, 4).equals(checks.get(i).getFecha().substring(0, 4))){
+				
+				String year = Integer.toString(GregorianCalendar.getInstance().get(GregorianCalendar.YEAR));
+				
+				for (int i = 0; i < checks.size(); i++) {
+					if(!checks.get(i).getFecha().substring(0, 4).equals(year)){
 						fiscal = false;
 						break;
 					}
@@ -256,6 +262,20 @@ public class GuiCliente extends JPanel {
 		btnFactura.setBounds(590, 10, 230, 45);
 		add(btnFactura);
 		
+		
+		JLabel lblCodigo = new JLabel("Codigo");
+		lblCodigo.setBounds(70, 65, 180, 15);
+		add(lblCodigo);
+		
+		
+		
+		JLabel lblFecha = new JLabel("Fecha");
+		lblFecha.setBounds(290, 65, 131, 15);
+		add(lblFecha);
+		
+		JLabel lblFacturado = new JLabel("Facturado");
+		lblFacturado.setBounds(490, 65, 118, 15);
+		add(lblFacturado);
 		
 		JPanel panel = scrolling();
 		
@@ -289,6 +309,19 @@ public class GuiCliente extends JPanel {
 		lblFacturas.setFont(new Font("Dialog", Font.BOLD, 29));
 		lblFacturas.setBounds(20, 10, 360, 45);
 		add(lblFacturas);
+		
+		JLabel lblCodigo = new JLabel("Codigo");
+		lblCodigo.setBounds(70, 65, 180, 15);
+		add(lblCodigo);
+		
+		JLabel lblFecha = new JLabel("Fecha");
+		lblFecha.setBounds(310, 65, 131, 15);
+		add(lblFecha);
+		
+		JLabel lblCif = new JLabel("CIF");
+		lblCif.setBounds(530, 65, 118, 15);
+		add(lblCif);
+		
 		
 		
 		JPanel panel = scrolling();

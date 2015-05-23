@@ -1,7 +1,6 @@
 package app;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -815,6 +814,21 @@ public class GuiAdmin extends GuiCliente {
 		});
 		btnListados.setBounds(590, 10, 230, 45);
 		add(btnListados);
+		
+		JLabel lblCodigo = new JLabel("Codigo");
+		lblCodigo.setBounds(70, 65, 180, 15);
+		add(lblCodigo);
+		
+		
+		
+		JLabel lblFecha = new JLabel("Fecha");
+		lblFecha.setBounds(290, 65, 131, 15);
+		add(lblFecha);
+		
+		JLabel lblFacturado = new JLabel("Facturado");
+		lblFacturado.setBounds(490, 65, 118, 15);
+		add(lblFacturado);
+		
 		JPanel panel = scrolling();
 		
 		
@@ -847,6 +861,17 @@ public class GuiAdmin extends GuiCliente {
 		lblFacturas.setBounds(20, 10, 360, 45);
 		add(lblFacturas);
 		
+		JLabel lblCodigo = new JLabel("Codigo");
+		lblCodigo.setBounds(70, 65, 180, 15);
+		add(lblCodigo);
+		
+		JLabel lblFecha = new JLabel("Fecha");
+		lblFecha.setBounds(310, 65, 131, 15);
+		add(lblFecha);
+		
+		JLabel lblCif = new JLabel("CIF");
+		lblCif.setBounds(530, 65, 118, 15);
+		add(lblCif);
 		
 		JPanel panel = scrolling();
 		
@@ -878,43 +903,43 @@ public class GuiAdmin extends GuiCliente {
 		final JRadioButton rdbtnListadoDeVentas = new JRadioButton("Listado de ventas realizadas agrupadas por clientes");
 		buttonGroup.add(rdbtnListadoDeVentas);
 		rdbtnListadoDeVentas.setSelected(true);
-		rdbtnListadoDeVentas.setBounds(8, 0, 426, 15);
+		rdbtnListadoDeVentas.setBounds(8, 10, 426, 15);
 		add(rdbtnListadoDeVentas);
 		
 		final JRadioButton rdbtnListadoDeVentas_1 = new JRadioButton("Listado de ventas realizadas a un cliente");
 		buttonGroup.add(rdbtnListadoDeVentas_1);
-		rdbtnListadoDeVentas_1.setBounds(8, 19, 426, 15);
+		rdbtnListadoDeVentas_1.setBounds(8, 30, 426, 15);
 		add(rdbtnListadoDeVentas_1);
 		
 		final JRadioButton rdbtnRankingDeProductos = new JRadioButton("Ranking de productos mas vendidos");
 		buttonGroup.add(rdbtnRankingDeProductos);
-		rdbtnRankingDeProductos.setBounds(8, 38, 426, 15);
+		rdbtnRankingDeProductos.setBounds(8, 50, 426, 15);
 		add(rdbtnRankingDeProductos);
 		
 		JLabel lblFechaInicio = new JLabel("Fecha inicio:");
-		lblFechaInicio.setBounds(548, 0, 88, 15);
+		lblFechaInicio.setBounds(548, 10, 88, 20);
 		add(lblFechaInicio);
 		
 		JLabel lblFechaFin = new JLabel("Fecha fin:");
-		lblFechaFin.setBounds(548, 19, 88, 15);
+		lblFechaFin.setBounds(548, 30, 88, 20);
 		add(lblFechaFin);
 		
 		fInicio = new JTextField();
 		fInicio.setText("2015-05-01");
-		fInicio.setBounds(654, 0, 88, 15);
+		fInicio.setBounds(654, 10, 88, 20);
 		add(fInicio);
 		fInicio.setColumns(10);
 		
 		fFin = new JTextField();
 		fFin.setText("2015-05-22");
-		fFin.setBounds(654, 19, 88, 15);
+		fFin.setBounds(654, 30, 88, 20);
 		add(fFin);
 		fFin.setColumns(10);
 		
 		
 		JButton btnListar = new JButton("Listar");
 		
-		btnListar.setBounds(590, 38, 104, 15);
+		btnListar.setBounds(590, 55, 104, 25);
 		add(btnListar);
 		
 

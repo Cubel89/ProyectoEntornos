@@ -91,7 +91,7 @@ public class TpvMain extends JFrame {
 		});
 		mnAyuda.add(mntmAcercaDe);
 		
-		mntmDesconectar = new JMenuItem("Desconectar");
+		mntmDesconectar = new JMenuItem("Cerrar sesion");
 		menuBar.getMenu(0).add(mntmDesconectar);
 		
 		mntmDesconectar.addActionListener(new ActionListener() {
